@@ -279,7 +279,7 @@ class Percy extends MacMahonPuzzle {
 	b.style.cursor = "default"
 
 	if (this.puzzleParameter === null)
-	    document.getElementById("solve-button").remove()
+	    document.getElementById("solve").remove()
 	else {
 	    document.getElementById("solve").style.cursor = "pointer"
 	}
