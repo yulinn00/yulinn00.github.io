@@ -52,15 +52,31 @@ class MacMahonGame {
 	const canvas = document.getElementById('board')
 	this.ch = new Canvas2d(canvas, 0, 0, this.colors['board'], 1);
 
-	canvas.onmousedown = this.onMouseDown.bind(this);
-	canvas.onmouseup = this.onMouseUp.bind(this);
-	canvas.onmousemove = this.onMouseMove.bind(this);
-	canvas.onmouseleave = this.onMouseLeave.bind(this);
+	const onPointerDown = this.onPointerDown.bind(this);
+	canvas.addEventListener('pointerdown', function(e) {
+	    e.preventDefault(); 
+	    onPointerDown(e);
+	}, {passive: false});
 
-	canvas.ontouchstart = this.onMouseDown.bind(this);
-	canvas.ontouchend = this.onMouseUp.bind(this);
-	canvas.ontouchemove = this.onMouseMove.bind(this);
+	const onPointerUp = this.onPointerUp.bind(this);
+	canvas.addEventListener('pointerup', function(e) {
+	    e.preventDefault(); 
+	    onPointerUp(e);
+	});
 
+	const onPointerMove = this.onPointerMove.bind(this);
+	canvas.addEventListener('pointermove', function(e) {
+	    e.preventDefault(); 
+	    onPointerMove(e);
+	}, {passive: false});
+
+	const onPointerLeave = this.onPointerLeave.bind(this);
+	canvas.addEventListener('pointerleave', function(e) {
+	    e.preventDefault(); 
+	    onPointerLeave(e);
+	}, {passive: false});
+
+	
 	this.vch = new Canvas2d(document.getElementById('variety'), 0, 0, this.colors['variety'], 1);
 	
 	document.addEventListener("keydown", this.onKeydown.bind(this));
@@ -544,7 +560,7 @@ class MacMahonGame {
 	return v;
     }
 
-    onMouseDown(event) {
+    onPointerDown(event) {
 	event.preventDefault();
 	var pos = this.ch.posFromEvent(event);
 	const sq = this.inSquare(this.ch, pos);
@@ -562,7 +578,7 @@ class MacMahonGame {
 	this.moving = pos;
     }
 
-    onMouseUp(event) {
+    onPointerUp(event) {
 	event.preventDefault();
 	if (this.moving === null || this.animating || this.isSolved) {
 	    return;
@@ -591,7 +607,7 @@ class MacMahonGame {
 	this.update();
     }
 
-    onMouseMove(event) {
+    onPointerMove(event) {
 	const pos = this.ch.posFromEvent(event);
 	const sq = this.inSquare(this.ch, pos);
 	event.preventDefault();
@@ -613,7 +629,7 @@ class MacMahonGame {
 	this.render();
     }
 
-    onMouseLeave(event) {
+    onPointerLeave(event) {
 	if (this.moving === null || this.isSolved) {
             return;
 	}

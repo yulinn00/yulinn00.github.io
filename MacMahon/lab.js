@@ -51,34 +51,66 @@ class Lab extends MacMahonGame {
 
 	const goalCanvas = document.getElementById('goal');
 	this.gch = new Canvas2d(goalCanvas, this.width * this.size, this.height * this.size, this.colors['goal'], this.scale);
-	goalCanvas.onmousedown = this.onGoalMouseDown.bind(this);
-	goalCanvas.onmouseup = this.onGoalMouseUp.bind(this);
-	goalCanvas.onmousemove = this.onGoalMouseMove.bind(this);
-	goalCanvas.onmouseleave = this.onGoalMouseLeave.bind(this);
 
-	goalCanvas.ontouchstart = this.onGoalMouseDown.bind(this);
-	goalCanvas.ontouchend = this.onGoalMouseUp.bind(this);
-	goalCanvas.ontouchemove = this.onGoalMouseMove.bind(this);
+	const onGoalPointerDown = this.onGoalPointerDown.bind(this);
+	goalCanvas.addEventListener('pointerdown', function(e) {
+	    e.preventDefault(); 
+	    onGoalPointerDown(e);
+	}, {passive: false});
+
+	const onGoalPointerUp = this.onGoalPointerUp.bind(this);
+	goalCanvas.addEventListener('pointerup', function(e) {
+	    e.preventDefault(); 
+	    onGoalPointerUp(e);
+	});
+
+	const onGoalPointerMove = this.onGoalPointerMove.bind(this);
+	goalCanvas.addEventListener('pointermove', function(e) {
+	    e.preventDefault(); 
+	    onGoalPointerMove(e);
+	}, {passive: false});
+
+	const onGoalPointerLeave = this.onGoalPointerLeave.bind(this);
+	goalCanvas.addEventListener('pointerleave', function(e) {
+	    e.preventDefault(); 
+	    onGoalPointerLeave(e);
+	}, {passive: false});
+
 	this.goalPos = [-1,-1];
 	this.goalTriangle = -1;
 
+
 	const contactCanvas = document.getElementById('contact-goal');
 	this.cch = new Canvas2d(contactCanvas, 3.5 * this.size, this.size, this.colors['contact'], this.scale);
-	contactCanvas.onmousedown = this.onContactMouseDown.bind(this);
-	contactCanvas.onmouseup = this.onContactMouseUp.bind(this);
-	contactCanvas.onmousemove = this.onContactMouseMove.bind(this);
-	contactCanvas.onmouseleave = this.onContactMouseLeave.bind(this);
 
-	contactCanvas.ontouchstart = this.onContactMouseDown.bind(this);
-	contactCanvas.ontouchend = this.onContactMouseUp.bind(this);
-	contactCanvas.ontouchemove = this.onContactMouseMove.bind(this);
+	const onContactPointerDown = this.onContactPointerDown.bind(this);
+	contactCanvas.addEventListener('pointerdown', function(e) {
+	    e.preventDefault(); 
+	    onContactPointerDown(e);
+	}, {passive: false});
+
+	const onContactPointerUp = this.onContactPointerUp.bind(this);
+	contactCanvas.addEventListener('pointerup', function(e) {
+	    e.preventDefault(); 
+	    onContactPointerUp(e);
+	});
+
+	const onContactPointerMove = this.onContactPointerMove.bind(this);
+	contactCanvas.addEventListener('pointermove', function(e) {
+	    e.preventDefault(); 
+	    onContactPointerMove(e);
+	}, {passive: false});
+
+	const onContactPointerLeave = this.onContactPointerLeave.bind(this);
+	contactCanvas.addEventListener('pointerleave', function(e) {
+	    e.preventDefault(); 
+	    onContactPointerLeave(e);
+	}, {passive: false});
+
 	this.contactPos = [-1,-1];
 
 	this.cch.canvas.style.cursor = "pointer";
 	this.vch.scale = this.scale;
-
-	this.ch.canvas.onmousedown = this.onMouseDown.bind(this)
-	this.ch.canvas.ontouchstart = this.onMouseDown.bind(this)
 
 	document.getElementById("toggle-freeze").cursor = "pointer";
 	this.addRemoveFrozen = false;
@@ -248,12 +280,12 @@ class Lab extends MacMahonGame {
 	this.render()
     }
 
-    onMouseDown(event) {
+    onPointerDown(event) {
 	event.preventDefault();
 	var pos = this.ch.posFromEvent(event);
 	const sq = this.inSquare(this.ch, pos);
 	if (!this.addRemoveFrozen) {
-	    super.onMouseDown(event);
+	    super.onPointerDown(event);
             return;
 	}
 	if (sq != -1) {
@@ -268,7 +300,7 @@ class Lab extends MacMahonGame {
 	this.update();
     }
 
-    onGoalMouseDown(event) {
+    onGoalPointerDown(event) {
 	event.preventDefault();
 	const pos = this.gch.posFromEvent(event);
 	const sq = this.inSquare(this.gch, pos);
@@ -278,7 +310,7 @@ class Lab extends MacMahonGame {
 	this.goalPos = pos;
     }
 
-    onGoalMouseUp(event) {
+    onGoalPointerUp(event) {
 	event.preventDefault();
 	const pos = this.gch.posFromEvent(event);
 	var goalTriangle = this.inBoundaryTriangle(this.gch, pos);
@@ -310,7 +342,7 @@ class Lab extends MacMahonGame {
 	this.goalTriangle = -1;
     }
 
-    onGoalMouseMove(event) {
+    onGoalPointerMove(event) {
 	event.preventDefault();
 	const pos = this.gch.posFromEvent(event);
 	if (pos != this.goalPos) {
@@ -320,20 +352,20 @@ class Lab extends MacMahonGame {
 	this.gch.canvas.style.cursor = this.inBoundaryTriangle(this.gch, pos) == -1 ? "default" : "pointer";
     }
 
-    onGoalMouseLeave(event) {
+    onGoalPointerLeave(event) {
 	event.preventDefault();
 	this.goalPos = [-1,-1];
 	this.goalTriangle = -1;
     }
 
 
-    onContactMouseDown(event) {
+    onContactPointerDown(event) {
 	event.preventDefault();
 	const pos = this.cch.posFromEvent(event);
 	this.contactPos = pos;
     }
 
-    onContactMouseUp(event) {
+    onContactPointerUp(event) {
 	event.preventDefault();
 	const pos = this.cch.posFromEvent(event);
 	if (pos[0] != this.contactPos[0] || pos[1] != this.contactPos[1] ) {
@@ -360,12 +392,12 @@ class Lab extends MacMahonGame {
 	this.contactPos = [-1,-1];
     }
 
-    onContactMouseMove(event) {
+    onContactPointerMove(event) {
 	event.preventDefault();
 	this.goalPos = [-1,-1];
     }
 
-    onContactMouseLeave(event) {
+    onContactPointerLeave(event) {
 	event.preventDefault();
 	this.contactPos = [-1,-1];
     }
