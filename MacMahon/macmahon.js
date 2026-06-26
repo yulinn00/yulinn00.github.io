@@ -81,6 +81,9 @@ class MacMahonGame {
 	    e.preventDefault(); 
 	    onPointerLeave(e);
 	}, {passive: false});
+	canvas.addEventListener('touchleave', function(e) {
+	    e.preventDefault();
+	}, {passive: false});
 
 	
 	this.vch = new Canvas2d(document.getElementById('variety'), 0, 0, this.colors['variety'], 1);
@@ -567,10 +570,9 @@ class MacMahonGame {
     }
 
     onPointerDown(event) {
-	event.preventDefault();
 	var pos = this.ch.posFromEvent(event);
 	const sq = this.inSquare(this.ch, pos);
-	if (sq == -1 || this.animating || this.isSolved ||
+	if (sq < 0 || this.animating || this.isSolved ||
 	    this.frozen.includes(sq) || this.hints.includes(sq)) {
 	    this.ch.canvas.style.cursor = "default";
             return;
@@ -585,14 +587,13 @@ class MacMahonGame {
     }
 
     onPointerUp(event) {
-	event.preventDefault();
 	if (this.moving === null || this.animating || this.isSolved) {
 	    return;
 	}
 	const pos = this.ch.posFromEvent(event);
 	const sq = this.inSquare(this.ch, pos);
 	this.ch.canvas.style.cursor = sq == -1 ? "default" : "pointer";
-	if ( sq == -1 || this.frozen.includes(sq) || this.hints.includes(sq)) {
+	if ( sq < 0 || this.frozen.includes(sq) || this.hints.includes(sq)) {
 	    this.ch.canvas.style.cursor = "default";
 	} else if (!this.moving.moved) {
 	    const t = new Date().getTime();
@@ -616,7 +617,12 @@ class MacMahonGame {
     onPointerMove(event) {
 	const pos = this.ch.posFromEvent(event);
 	const sq = this.inSquare(this.ch, pos);
-	event.preventDefault();
+	if (sq == -2) {
+	    this.ch.canvas.style.cursor = "default";
+	    this.moving = null;
+	    this.render();
+	    return;
+	}
 	if (this.isSolved) {
 	    this.ch.canvas.style.cursor = "default";
             return;
@@ -639,7 +645,7 @@ class MacMahonGame {
 	if (this.moving === null || this.isSolved) {
             return;
 	}
-	event.preventDefault();
+	this.ch.canvas.style.cursor = "default";
 	this.moving = null;
 	this.render();
     }
@@ -713,6 +719,8 @@ class MacMahonGame {
 	const edge = this.size * 0.05 / ch.scale;
 	const x = Math.floor(pos.x / size);
 	const y = Math.floor(pos.y / size);
+	if (x < 0 || x >= this.width || y < 0 || y >= this.height)
+	    return -2;
 	if (edge <= pos.x - x * size && (x + 1) * size - pos.x < size - edge &&
 	    edge <= pos.y - y * size && (y + 1) * size - pos.y < size - edge) {
 	    return y * this.width + x;

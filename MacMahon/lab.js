@@ -281,14 +281,13 @@ class Lab extends MacMahonGame {
     }
 
     onPointerDown(event) {
-	event.preventDefault();
 	var pos = this.ch.posFromEvent(event);
 	const sq = this.inSquare(this.ch, pos);
 	if (!this.addRemoveFrozen) {
 	    super.onPointerDown(event);
             return;
 	}
-	if (sq != -1) {
+	if (sq >= 0) {
 	    const i = this.frozen.indexOf(sq);
 	    if (i == -1) {
 		this.frozen.push(sq);
@@ -301,7 +300,6 @@ class Lab extends MacMahonGame {
     }
 
     onGoalPointerDown(event) {
-	event.preventDefault();
 	const pos = this.gch.posFromEvent(event);
 	const sq = this.inSquare(this.gch, pos);
 	if (this.frozen.includes(sq))
@@ -311,7 +309,6 @@ class Lab extends MacMahonGame {
     }
 
     onGoalPointerUp(event) {
-	event.preventDefault();
 	const pos = this.gch.posFromEvent(event);
 	var goalTriangle = this.inBoundaryTriangle(this.gch, pos);
 	if (pos[0] != this.goalPos[0] || pos[1] != this.goalPos[1] || this.goalTriangle == -1) {
@@ -343,7 +340,6 @@ class Lab extends MacMahonGame {
     }
 
     onGoalPointerMove(event) {
-	event.preventDefault();
 	const pos = this.gch.posFromEvent(event);
 	if (pos != this.goalPos) {
 	    this.goalPos = [-1,-1];
@@ -353,20 +349,17 @@ class Lab extends MacMahonGame {
     }
 
     onGoalPointerLeave(event) {
-	event.preventDefault();
 	this.goalPos = [-1,-1];
 	this.goalTriangle = -1;
     }
 
 
     onContactPointerDown(event) {
-	event.preventDefault();
 	const pos = this.cch.posFromEvent(event);
 	this.contactPos = pos;
     }
 
     onContactPointerUp(event) {
-	event.preventDefault();
 	const pos = this.cch.posFromEvent(event);
 	if (pos[0] != this.contactPos[0] || pos[1] != this.contactPos[1] ) {
 	    this.contactPos = [-1,-1];
@@ -393,12 +386,10 @@ class Lab extends MacMahonGame {
     }
 
     onContactPointerMove(event) {
-	event.preventDefault();
 	this.goalPos = [-1,-1];
     }
 
     onContactPointerLeave(event) {
-	event.preventDefault();
 	this.contactPos = [-1,-1];
     }
 
