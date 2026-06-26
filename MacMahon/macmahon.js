@@ -57,6 +57,9 @@ class MacMahonGame {
 	    e.preventDefault(); 
 	    onPointerDown(e);
 	}, {passive: false});
+	canvas.addEventListener('touchdown', function(e) {
+	    e.preventDefault(); 
+	}, {passive: false});
 
 	const onPointerUp = this.onPointerUp.bind(this);
 	canvas.addEventListener('pointerup', function(e) {
@@ -68,6 +71,9 @@ class MacMahonGame {
 	canvas.addEventListener('pointermove', function(e) {
 	    e.preventDefault(); 
 	    onPointerMove(e);
+	}, {passive: false});
+	canvas.addEventListener('touchmove', function(e) {
+	    e.preventDefault(); 
 	}, {passive: false});
 
 	const onPointerLeave = this.onPointerLeave.bind(this);
