@@ -1,0 +1,142 @@
+<!doctype html>
+
+<html>
+  <head>
+    <script src="partition.js"></script>
+    <script src="classroom.js"></script>
+    <link rel="stylesheet" href="partition.css">
+    <title>Bulgarian Solitaire and Partitions Classroom</title>
+
+    <style>
+      .section {
+	  margin-left: 18px;
+	  margin-right: 18px;
+	  margin-top: 18px;
+	  width: 1080px;
+      }
+      .content {
+	  display:grid; grid-template-columns: 5fr 1fr;
+	  align-items: center;
+	  gap: 0px 18px;
+      }
+      .content42 {
+	  display:grid; grid-template-columns: 4fr 2fr;
+	  align-items: center;
+	  gap: 0px 18px;
+      }
+      .content33 {
+	  display:grid; grid-template-columns: 3fr 3fr;
+	  align-items: center;
+	  gap: 0px 18px;
+      }
+    </style>
+    
+  </head>
+  <body style="background-color:#c0c0c0">
+    <div style="position: absolute; top: 6px; left: 20px"><a href="../about.html"><img src="../fun-math-club.gif"/></a></div>
+    <h1 style="margin-top: 40px; margin-bottom: 40px; text-align:center">Bulgarian Solitaire and Partitions</h1>
+  <h2>Partitions</h2>
+  <div class="section">
+    <div class="content42">
+      <div>
+	<p>
+	  A <i>partition</i> of a positive integer <i>n</i> is an expression of <i>n</i> as the sum of positive integers. For example, 4+2+1+1 is a partition of 8. Each summand is a <i>part</i> of the partition. The order of the parts in the sum is not important. Thus 4+2+1+1 and 1+4+2+1 are the same partition.
+	  It is often convenient and sometimes very illuminating to represent partitions graphically. Two widely used representations of partitions are the <i>Ferrers diagram</i> and the <i>Young diagram</i>. Ferrers diagrams display each part <i>p</i> of a partition as a row of <i>p</i>dots, while Young diagrams use a row of <i>p</i> squares. In noth representations the rows are displayed from top to bottom ordered by length, longest to shortest.  The diagrams to the right offer examples of both representations for the partition 5+4+3+1. 
+	</p>
+      </div>
+      <div style="display: grid; place-items:center; grid-template-columns: 200px 200px; ">
+      	<div id="Ferrersboard" style="position: relative; width: 150px; height: 150px;"></div>
+      	<div id="Youngboard" style="position: relative; width: 150px; height: 150px;"></div>
+	<div>Ferrers diagram</div>
+	<div>Young diagram</div>
+      </div>
+    </div>
+  </div>
+  <h2>Bulgarian Solitaire</h2>
+  <div class="section">
+    <div class="content">
+      <div>
+	Bulgarian solitaire is a mathematical diversion played with coins (or poker chips, playing cards, or any small item that is easily stackable). We'll typically describe the things being stacked as <i>items</i>. A <i>position</i> in Bulgarian solitaire is a set of stacks of items. In the example to the right, the item is a playing card, the positions has four stacks of items. The sizes of the stacks are 5, 2, 2, and 1. We can think of these stacks as representing the parts of a partition of the total numer of items. Like the parts of a partition, the order of the stacks does not matter. We will, for ease of recognizing identical positions, <i>normalize</i> positions by ordering stacks from left-to-right in non-increasing size. As a result of this correspondence, the number of possible positions in a Bulgarian solitaire game with <i>n</i> items is equal to the number of partitions of <i>n</i> 
+      </div>
+      <div>
+	<div id="Disksboard" style="position: relative; width: 200px; height: 40px;">
+	</div>
+      </div>
+      <div>
+	<p>
+	  A <i>Bulgarian solitaire move</i> consists of removing one item from each stack and making a new stack with the removed items. To see an example move, click on the "Bulgarian Solitaire Move" button to the right. It transforms the Bulgarian solitaire position 5, 2, 1, 1 into the position 4, 4, 1, 1. In terms of partitions, the move reduces each part of a partition by 1 and adds a new part equal to the number of parts in the original partition; any part reduced to zero is dropped.
+	</p>
+	<p>
+	  To play the game, the player makes a move, notes the new stack sizes, and repeats as longs as she wishes. An immmediate observation is that the player must eventually reach a sequence of positions that repeat in a cycle. This follows from the fact that there are a finite number of positions. Once a position is repeated, the sequence of positions between the two occurrences of the prepeated position will recur indefinitely. Eventually, boredom sets in and the player start anew with a different arrangement of items into stacks.
+	</p>
+	<p>
+	  Cycles are effectively the end of a Bulgarian solitaire game as all remaining moves result in next position in the cycle. In contrsst to a position in the ending cycle which always has a predecessor, a position that can <i>not</i> be  the result of the Bulgarian solitaire move is called a <i>garden of eden</i> (GE)position.  Although not immediately obvious that GE positions exist, it is relatively easy to identify and categorize them.
+	</p>
+      </div>
+      <div>
+	<div id="Moveboard" style="position: relative; width: 180px; height: 100px; border: 1px solid black;"></div>
+	<div style="text-align: center; margin-top: 6px;">
+	  <button id="makeMove" onclick="onMakeMove()">Bulgarian Solitaire Move</button>
+	</div>
+      </div>
+    </div>
+    <div style="margin-top: 10px;">
+    </div>
+  </div>
+  <h2>The Bulgarian Solitaire Graph</h2>
+<div class="section">
+  <div class="content33">
+    <div>
+      <p>
+	We can represent this function graphically by drawing an arrow from a partition to the one it is transformed to by the move. Doing this for all partitions of <i>n</i> results in the Bulgarian solitaire graph of order <i>n</i>. The Bulgarian solitaire graph is a directed graph has <i>p(n)</i> vertices, A directed edge connects partition <i>p<sub>1</sub></i> to <i>p<sub>2</sub></i> when performing the Bulgarian solitaire move on <i>p<sub>1</sub></i> gives partition <i>p<sub>2</sub></i>.
+      </p>
+      <p>
+	The Bulgarian solitaire graph of order 4 is shown to the right.
+      </p>
+      <p>
+	Questions about the game of Bulgarian solitaire can easily be phrased in terms of the graph. For exaple, a garden of eden partition is a vertex with in-degree 0, i.e. a vertex with no arrows pointing to it. We can see that the only garden of eden partition of 4 is 1+1+1+1.
+    </div>
+    <div style="text-align:center;">
+      <img src="graph-4.png">
+    </div>
+  </div>
+</div>
+<h2>The Laboratory</h2>
+<div class="section">
+  <div class="content">
+    <div>
+      <p>
+	The Bulgarian Solitaire Laboratory allows you to play and experiment with Bulgarian solitaire. In addition to the Bulgarian solitaire operation, the laboratory supports the <i>conjugate</i> operation.
+	Graphically speaking, the conjugate of a partition is the partition obtained by reflecting the partition's Ferrer diagram across the 45<sup>o</sup> southwest to northeast line. The graphic to the right illustrates the conjugate operation applied to the partition 5+2+2+1+1 resulting in the conjugate partition 5+3+1+1+1.
+      </p>
+      <p>
+      The user chooses a <i>move</i> to be used in the game. To play the traditional Bulgarian solitaire, choose "B" as the move. If you'd like to experiment with a new game where, for example, the move is the Bulgarian solitaire operation followed by a conjugate operation, choose "BC" as the move.
+      </p>
+      <p>
+	The user can choose to  display the game as it would appear if playing with coins or playing cards. In addition the use can choose to shows the positions as  partitions in the form of a Ferrers diagram or a Young diagrams., As a final option, the user can choose to display the game  as a <i>funnel</i> diagram. The funnel diagrams shows the partition using squares like the Young diagram does, but rotated 45<sup>o</sup>. If one imagines gravity acting on the square tiles, it demonstrates how the ending cycles arise and provides an graphic for exlplaining what the possible cycle are.
+      </p>
+    </div>
+    <div>
+      <div id="Conjugateboard" style="position: relative; width: 180px; height: 150px; border: 1px solid black;"></div>
+      <div style="text-align: center; margin-top: 6px">
+	<button id="makeConjugate" onclick="onMakeConjugate()">Conjugate opeation</button>
+      </div>
+    </div>
+    <div>
+      <p>
+	When executing the moves, the labpratory dynamically displays positions attained. The user can select one of four modes: animate, step, skip, jump. In animate mode, all physical movements of items are shown in an animation. Step mode is similar, except that the movements are not smooth -- items jump from place to place. Skip mode only shows the results of each Bulgarian solitaire or conjugate operation in the move. Jump only displays the outcome of all Bulgarian solitaire and conjugates operations in the move.
+      </p>
+      <p>
+	The movement and display can be further customized in three ways. (1) The display of physical items can be shown as overlapping, giving them a three-dimensional look. (2) The new stack in the Bulgarian solitaire operation can be added before the first or after the last of the remainder of the stacks. (3) The items moving in the operations can be colored to identify which ones are moving.
+      </p>
+    </div>
+  </div>
+  <div>
+    Try out the laboratory <a href="lab.html">here</a>.
+  </div>
+</div>
+  </body>
+  <script>
+    window.onload = classroomWindow();
+  </script>
+</html>
