@@ -53,41 +53,37 @@ body {
 </head>
 <body>
   <div style="position: absolute; top: 6px; left: 20px"><a href="../about.html"><img src="../fun-math-club.gif"/></a></div>
-  <h1 style="margin-top: 40px; margin-bottom: 60px; text-align:center"> Bulgarian Solitaire Laboratory</h1>
+  <h1 style="margin-top: 40px; margin-bottom: 60px; text-align:center">Bulgarian Solitaire Laboratory</h1>
   <div style="text-align: center;">
-    <form style="display: grid; grid-template-columns: max-content 1fr; gap: 10px; align-items: center; max-width: 200px; margin:auto; margin-bottom: 6px;">
+    <div style="display: grid; grid-template-columns: max-content 1fr; gap: 10px; align-items: center; max-width: 200px; margin:auto; margin-bottom: 6px;">
       <label for="partition" style="justify-self: end;">Partition:</label>
       <input id="partition" name="partition" value="5 3 1">
       <label for="move" style="justify-self: end;">Move:</label>
       <input id="move" name="move" value="B">
-    </form>
+    </div>
     B = Bulgarian solitaire, C = conjugate, applied left to right
   </div>
   <div style="margin-top: 20px; text-align: center;">
-    <form id="displayForm">
-      <label style="cursor:=pointer;"><input id="disks" type="radio" name="display" value="disks" checked style="cursor:=pointer;">
-	Disks</label>
-      <label style="cursor:=pointer;"><input id="cards" type="radio" name="display" value="cards" style="cursor:=pointer; margin-left: 20px;">
-	Cards</label>
-      <label style="cursor:=pointer;"><input id="Ferrers" type="radio" name="display" value="Ferrers" style="cursor:=pointer; margin-left: 20px;">
-	Ferrers diagram</label>
-      <label style="cursor:=pointer;"><input id="Young" type="radio" name="display" value="Young" style="cursor:=pointer; margin-left: 20px;">
-	Young diagram</label>
-      <label style="cursor:=pointer;"><input id="funnel" type="radio" name="display" value="Funnel" style="cursor:=pointer; margin-left: 20px;">
-	Funnel</label>
-    </form>
+    <label style="cursor:=pointer;"><input id="disks" type="radio" name="display" value="disks" checked style="cursor:=pointer;">
+      Disks</label>
+    <label style="cursor:=pointer;"><input id="cards" type="radio" name="display" value="cards" style="cursor:=pointer; margin-left: 20px;">
+      Cards</label>
+    <label style="cursor:=pointer;"><input id="Ferrers" type="radio" name="display" value="Ferrers" style="cursor:=pointer; margin-left: 20px;">
+      Ferrers diagram</label>
+    <label style="cursor:=pointer;"><input id="Young" type="radio" name="display" value="Young" style="cursor:=pointer; margin-left: 20px;">
+      Young diagram</label>
+    <label style="cursor:=pointer;"><input id="funnel" type="radio" name="display" value="Funnel" style="cursor:=pointer; margin-left: 20px;">
+      Funnel</label>
   </div>
   <div style="margin-top: 20px; text-align: center;">
-    <form id="modeForm">
-      <label style="cursor:=pointer;"><input id="animate" type="radio" name="mode" value="animate" checked style="cursor:=pointer;">
-	animate</label>
-      <label style="cursor:=pointer;"><input id="step" type="radio" name="mode" value="step" style="cursor:=pointer; margin-left: 20px;">
-	step</label>
-      <label style="cursor:=pointer;"><input id="skip" type="radio" name="mode" value="skip" style="cursor:=pointer; margin-left: 20px;">
-	skip</label>
-      <label style="cursor:=pointer;"><input id="jump" type="radio" name="mode" value="jump" style="cursor:=pointer; margin-left: 20px;">
-	jump</label>
-    </form>
+    <label style="cursor:=pointer;"><input id="animate" type="radio" name="mode" value="animate" checked style="cursor:=pointer;">
+      animate</label>
+    <label style="cursor:=pointer;"><input id="step" type="radio" name="mode" value="step" style="cursor:=pointer; margin-left: 20px;">
+      step</label>
+    <label style="cursor:=pointer;"><input id="skip" type="radio" name="mode" value="skip" style="cursor:=pointer; margin-left: 20px;">
+      skip</label>
+    <label style="cursor:=pointer;"><input id="jump" type="radio" name="mode" value="jump" style="cursor:=pointer; margin-left: 20px;">
+      jump</label>
     <div style="margin-top:10px text-align: center;">
       Speed:
       <input type="range"
