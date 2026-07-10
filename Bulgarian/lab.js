@@ -534,14 +534,14 @@ speedSlider.oninput = () => {
 };
 
 onChangeConfig(document.querySelector('input[name="display"]:checked').value);
-const displayForm = document.querySelector('#displayForm');
-displayForm.addEventListener('change', function(event) {
+const displayDiv = document.querySelector('#display');
+displayDiv.addEventListener('change', function(event) {
     onChangeConfig(event.target.value);
 });
 
 newSettings.mode = document.querySelector('input[name="mode"]:checked').value;
-const modeForm = document.querySelector('#modeForm');
-modeForm.addEventListener('change', function(event) {
+const settingsDiv = document.querySelector('#settings');
+settingsDiv.addEventListener('change', function(event) {
     onChangeMode(event.target.value);
 });
 
