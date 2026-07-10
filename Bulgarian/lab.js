@@ -364,15 +364,15 @@ function setPartition()
 
     if (!parts.every((x) => Number.isInteger(x) && x>0)) {
 	alert( "The partition is incorrectly entered. It must be positive integers separated by spaces or a comma and spaces");
-	return;
+	return false;
     }
     if (parts.length > 40) {
 	alert( "The maximum number of parts is 40 (exceeded in entered partition).");
-	return;
+	return false;
     }
     if (parts.some((x) => x > 40)) {
 	alert("The maximum part is 40 (exceeded in the partition entered");
-	return;
+	return false;
     }
 
     partition0 = new Partition(...parts);
@@ -380,9 +380,10 @@ function setPartition()
 
     const move0 = move.value.trim();
     if (move0.match(/[BbCc]/g).length != move0.length) {
-	alert( "The move is incorectly entered. It must be a string only of the characters B, b, C, or c");
-	return;
+	alert( "The move is incorectly entered. It must include only characters B, b, C, or c");
+	return false;
     }
+
     game = new PartitionGame(partition0, move0);
 
     seq = 0;
@@ -399,6 +400,8 @@ function setPartition()
 	    game.sequence[seq].parts.join(' ') +
 	    "</span>\n";
     document.getElementById("plist").innerHTML = plist;
+
+    return true;
 }
 
 function getNextHop(first) {
@@ -470,8 +473,8 @@ function stop() {
 function onStart() {
     if (gameState != "stopped")
 	return;
-    setPartition();
-    start();
+    if (setPartition())
+	start();
 }
 
 function onStopResume() {
