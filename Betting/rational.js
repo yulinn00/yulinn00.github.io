@@ -61,15 +61,15 @@ class Rational {
 	if (this.denominator === 1)
 	    return `${this.numerator}`;
 	if (mixed && Math.abs(this.numerator) > this.denominator) {
-	    const i = Math.trunk(this.numerator / this.denominator);
-	    const f = this.numerator % this.denominator;
+	    const i = Math.trunc(this.numerator / this.denominator);
+	    const f = Math.abs(this.numerator % this.denominator);
 	    return `${i} ${f}/${this.denominator}`;
 	}
 	return `${this.numerator}/${this.denominator}`;
     }
 
-    ceiling() {
-	return this.denominator == 1 ? this.numerator : Math.ceil(valueOf{});
+    ceil() {
+	return this.denominator == 1 ? this.numerator : Math.ceil(this.valueOf());
     }
 
     floor() {
@@ -98,6 +98,22 @@ class Rational {
 
     max(other) {
 	return this.lt(other) ? other : this;
+    }
+
+    static fromString(str) {
+	str = str.trim();
+	const mixed_parts = str.match(/(?<sgn>-?)((?<w1>\d+)\s+(?<n1>\d+)[/](?<d1>\d+)|(?<n2>\d+)[/](?<d2>\d+)|(?<w3>\d+))/);
+	const sgn = mixed_parts.groups.sgn == '-' ? -1 : 1;
+	if (mixed_parts.groups.w1 !== undefined) {
+	    return new Rational(sgn * parseInt(mixed_parts.groups.w1) * parseInt(mixed_parts.groups.d1) + parseInt(mixed_parts.groups.n1), parseInt(mixed_parts.groups.d1));
+	}
+	if (mixed_parts.groups.n2 !== undefined) {
+	    return new Rational(sgn * parseInt(mixed_parts.groups.n2), parseInt(mixed_parts.groups.d2));
+	}
+	if (mixed_parts.groups.w3 !== undefined) {
+	    return new Rational( sgn * parseInt(mixed_parts.groups.w3));
+	}
+	return NaN;
     }
 }
 
