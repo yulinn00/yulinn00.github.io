@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>The Betting on Red Game and Variations</title>
+<script src="rational.js"></script>
+<script src="betting.js"></script>
+<script src="game.js"></script>
+
+<link rel="icon" type="image/png" sizes="32x32" href="../fun-math-icon.png">
+
+<style>
+body {
+    background: #c0c0c0
+}
+
+.controls {
+    margin-bottom: 20px;
+}
+
+#board {
+    position: relative;
+    width: 960px;
+    height: 200px;
+    border: 0px solid #aaa;
+    background: black;
+}
+
+#status {
+    position: relative;
+    width:  960px;
+    height: 20px;
+    border: 0px solid #aaa;
+    text-align: left;
+}
+
+#action {
+    position: relative;
+    width:  960px;
+    height: 20px;
+    border: 0px solid #aaa;
+    text-align: left;
+}
+
+.card {
+    width: 90px;
+    height: 130px;
+    border: 0px;
+    background-size: contain;
+    background-position: center;
+}
+
+
+</style>
+</head>
+<body>
+  <div style="position: absolute; top: 6px; left: 20px"><a href="../about.html"><img src="../fun-math-club.gif"/></a></div>
+  <h1 style="margin-top: 40px; margin-bottom: 60px; text-align:center">The Betting on Red Game and Variations</h1>
+  <div style="text-align: center; display: grid; grid-template-columns: 260px 360px; gap: 40px; align-items: center; max-width: 500px; margin:auto;">
+    <div style="display: grid; grid-template-columns: 200px 60px; gap: 10px; align-items: center; max-width: 400px; margin:auto;">
+      <label for="numcards" style="justify-self: end;">Number of cards:</label>
+      <input id="numcards" name="numcards" type="number" min="2" max="10" step="1" value="8">
+      <label for="numred" style="justify-self: end;">Number of red cards:</label>
+      <input id="numred" name="numred" type="number" min="0" max="10" step="1" value="4">
+      <label for="bankroll" style="justify-self: end;">Bettor's starting units:</label>
+      <input id="bankroll" name="bankroll" value="40">
+      <div></div>
+    </div>
+    <div style="display:grid; grid-template-columns: 360px; gap: 5px; margin: auto; align-items: center; justify-items: start;">
+      <label style="cursor:=pointer; text-align: left;"><input id="betredorblack" type="checkbox" name="betredorblack" value="yes" style="cursor:=pointer;">
+	Bet on red or black</label>
+      <div style="display:grid; grid-template-columns: 50px 80px; gap: 5px;">
+      <label for "bettor" style="margin-right: 10px;">Bettor:</label>
+      <select id="bettor" name="bettor">
+	<option value="human" selected>Human</option>
+	<option value="expert">Expert</option>
+	<option value="beginner">Beginner</option>
+      </select>
+      <label for="dealer" style="margin-right: 10px;">Dealer:</label>
+      <select id="dealer" name="dealer">
+	<option value="human" selected>Human</option>
+	<option value="shuffle">Shuffle</option>
+	<option value="expert">Expert</option>
+	<option value="beginner">Beginner</option>
+      </select>
+      </div>
+    </div>
+  </div>
+  <div style="text-align: center; margin-top: 20px;">
+    <button id="apply" onclick="onApply()">Apply</button>
+  </div>
+  <hr style="margin-top:12px; margin-bottom:12px; text-align: center;"/>
+  <div style=" display: grid; grid-template-columns: max-content; gap: 10px 10px; justify-content: center;">
+    <div id="viewport" style="margin-top: 0px">
+      <div id="board"></div>
+    </div>
+  </div>
+  <hr style="margin-top:12px; margin-bottom:12px; text-align: center;"/>
+  <div style=" display: grid; grid-template-columns: max-content; gap: 10px 10px; justify-content: center;">
+      <div id="status" style="text-align: center; margin-top: 12px;"></div>
+      <div style="text-align: center; margin-top: 16px; margin-bottom: 16px; color: white; background-color: #404040;">
+	<div id="action" style="text-align: center; color: white; background-color: #404040;"></div>
+      </div>
+  </div>
+  <div style="text-align: center; display: grid; grid-template-columns: 60px 140px; gap: 5px; align-items: center; max-width: 500px; justify-content: center; margin: auto">
+    <div style="display:grid; grid-template-columns: 60px; text-align: left">
+      <label id="betred" style="cursor: pointer; color: red; visibility: hidden"><input id="red" type="radio" name="betcolor" value="red" checked style="cursor:=pointer; visibility: hidden">
+	Red</label>
+      <label id="betblack" style="cursor: pointer; color: black; visibility: hidden"><input id="black" type="radio" name="betcolor" value="black" style="cursor:=pointer; visibility: hidden">
+	Black</label>
+    </div>
+    <div style="text-align: left; align-self: start;">
+      <label id="wagerlabel" for="wager" style="color: green; margin-right: 4px; visibility: hidden">Wager:</label>
+      <input id="wager" name="wager" style="width: 60px; visibility: hidden" value="0">
+    </div>
+  </div>
+  <div style="margin-top:12px"> </div>
+  <div style="text-align: center; display: grid; grid-template-columns: 300px; align-items: center; max-width: 500px; justify-content: center; margin: auto; ">
+    <div>
+      <button id="ok" onclick="onOK()" style="visibility: hidden;">OK</button>
+      <button id="undo" onclick="onUndo()" style="margin-left:20px; visibility: hidden;">Undo</button>
+    </div>
+  </div>
+  <script src="betonred.js"></script>
+</body>
+</html>
+

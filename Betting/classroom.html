@@ -1,0 +1,235 @@
+<!doctype html>
+
+<html>
+  <head>
+    <script src="rational.js"></script>
+    <script src="betting.js"></script>
+    <script src="game.js"></script>
+
+    <link rel="icon" type="image/png" sizes="32x32" href="../fun-math-icon.png">
+
+    <title>Betting on Red and other Games Classroom</title>
+
+    <style>
+      .section {
+	  margin-left: 18px;
+	  margin-right: 18px;
+	  margin-top: 18px;
+	  width: 1080px;
+      }
+      .content {
+	  display:grid; grid-template-columns: 5fr 1fr;
+	  align-items: center;
+	  gap: 0px 18px;
+      }
+      .content42 {
+	  display:grid; grid-template-columns: 4fr 2fr;
+	  align-items: center;
+	  gap: 0px 18px;
+      }
+      .content33 {
+	  display:grid; grid-template-columns: 3fr 3fr;
+	  align-items: center;
+	  gap: 0px 18px;
+      }
+      #status {
+	  position: relative;
+	  width:  600px;
+	  height: 20px;
+	  border: 0px solid #aaa;
+	  text-align: left;
+      }
+
+      #action {
+	  position: relative;
+	  width:  600px;
+	  height: 20px;
+	  border: 0px solid #aaa;
+	  text-align: left;
+      }
+      .card {
+	  width: 90px;
+	  height: 130px;
+	  border: 0px;
+	  background-size: contain;
+	  background-position: center;
+      }
+    </style>
+    
+  </head>
+  <body style="background-color:#c0c0c0">
+    <div style="position: absolute; top: 6px; left: 20px"><a href="../about.html"><img src="../fun-math-club.gif"/></a></div>
+    <h1 style="margin-top: 40px; margin-bottom: 40px; text-align:center">Betting on <span style="color: red;">Red</span> and other Games</h1>
+  <h2>Betting on Red</h2>
+  <div class="section">
+    <div class="content">
+      <div>
+	<p>
+	  We will be exploring a betting game that can be either played with two players or as solitaire game. The game is played with a pack of playing cards. The number of red and black cards is known to the player. It is shuffled and the cards are dealt out in a row face down. The player is the <i>bettor</i>. The bettor has a <i>bankroll</i> of money at the start. The game is played in rounds, one round for each card dealt. At the start of each round, the bettor may make a bet that the card played by the dealer in that round will be a red card. He enters a <i>wager</i>, the bet amount, which must be less than or equal to his current bankroll. The card dealt for that round is then played (revealed). If it is red, the bettor wins the bet and receives the amount of his wager. If the card is black, the bettor loses the amount of his wager. The card dealt is removed and is no longer in play. This is repeated until all cards have been removed.
+	</p>
+	<p>
+	  When placing a bet, the wager amount must be entered in one of three formats: a whole number, a fraction, or a mixed number. The value must be positive or 0. Entering 0 indicates the bettor is not placing a bet that round. To enter a fraction units, enter two positive integers (numerator and denominator) separated by a slash ("/"). A fraction cannot contain any spaces. A mixed number is entered as a positive integer followed by one or more spaces and a fraction.
+	</p>
+	<p>
+	  In the examples below of the number "two and three-fourths", the green text versions are correect entries, the red ones are not.
+	</p>
+	<div style="text-align: center;">
+	  <span style="background-color: #404040; color: #40ff40">&nbsp;2 3/4&nbsp;</span>
+	  <span style="background-color: #404040; color: #40ff40">&nbsp;2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3/4&nbsp;</span>
+	  <span style="background-color: #404040; color: #40ff40">&nbsp;11/4&nbsp;</span>
+	  <span style="background-color: #404040; color: #ff4040">&nbsp;2&nbsp;3&nbsp;&nbsp;&nbsp;/4&nbsp;</span>
+	  <span style="background-color: #404040; color: #ff4040">&nbsp;11&nbsp;&nbsp;/4&nbsp;</span>
+	</div>
+	<p>
+      <div style="display: grid; place-items:center; grid-template-columns: 200px 200px; ">
+      </div>
+    </div>
+    </div>
+  </div>
+  <h2>Play a game</h2>
+  <div class="section">
+    <div class="content">
+      <div>
+	<p>
+	  Play a game with a pack of 3 red and 3 black cards. Starting with 100 units of money, how much can you win?
+      </div>
+    </div>
+    <div style="width: 600px; height:360px; border: 1px solid black; justify-content: center; align-items: center; margin-left: 150px;">
+      <div id="viewport" style="display: flex; margin-top: 0px; justify-content: center; align-items: center;">
+	<div id="board" style="position:relative; width: 576px; height: 154px; border: 0px; background: black; margin-top:10px;"></div>
+      </div>
+      <hr style="margin-top:12px; margin-bottom:12px; text-align: center;"/>
+      <div style=" display: grid; grid-template-columns: max-content; gap: 10px 10px; justify-content: center;">
+	<div id="status" style="text-align: center; margin-top: 16px;"></div>
+	<div style="text-align: center; margin-top: 16px; margin-bottom: 16px; color: white; background-color: #404040;">
+	  <div id="action" style="text-align: center; color: white; background-color: #404040;"></div>
+	</div>
+      </div>
+      <div style="text-align: center; display: grid; grid-template-columns: 60px 140px; gap: 5px; align-items: center; max-width: 500px; justify-content: center; margin: auto">
+	<div style="display:grid; grid-template-columns: 60px; text-align: left">
+	  <label id="betred" style="cursor:=pointer; color: red;"><input id="red" type="radio" name="betcolor" value="red" checked style="cursor: pointer;">
+	    Red</label>
+	  <label id="betblack" style="display: none; cursor:=pointer; color: black;"><input id="black" type="radio" name="betcolor" value="black" style="display: none; cursor: pointer;">
+	    Black</label>
+	</div>
+	<div style="text-align: left; align-self: start;">
+	  <label id="wagerlabel" for="wager" style="color: green; margin-right: 4px;">Wager:</label>
+	  <input id="wager" name="wager" style="width: 30px;" value="0">
+	</div>
+      </div>
+      <div style="margin-top:12px"> </div>
+      <div style="text-align: center; display: grid; grid-template-columns: 300px; align-items: center; max-width: 500px; justify-content: center; margin: auto; ">
+	<div>
+	  <button id="ok" onclick="onOK()" style="visibility: hidden;">OK</button>
+	</div>
+      </div>
+    </div>
+  </div>
+  <h2>Variations and options</h2>
+  <div class="section">
+    <div class="content">
+      <div>
+	<p>
+	The Betting on Red Game page supports a number of variations of the basic Betting on Red game:
+	</p>
+	<p>
+	  Option 1: setting the number of red and black cards. To set the composition of the deck, edit the "Number of Cards" and "Number of Red Cards" fields on the game page.
+	</p>
+      </div>
+      <div>
+      </div>
+      <div>
+	<p>
+	  Option 2: setting the amount of money units the bettor starts with. Edit the "Bettor's starting units" field to set this.
+	</p>
+      </div>
+      <div>
+      </div>
+      <div>
+	<p>
+	  Option 3: setting the bettor. There are three types of bettors to choose from on the game page: "expert", "beginner", or human". The expert bettor places very good (but no necessarily) optimal bets. The beginner bettor bets are less optimal. The human bettor allows a human player to choose the bets each round.
+	</p>
+      </div>
+      <div>
+      </div>
+      <div>
+	<p>
+	  Option 4: setting the dealer. There are four types of dealer to choose from on the game page: "shuffle", "expert", "beginner", or human". The shuffle dealer shuffles and deals the cards before any bets are revealed. The cards are played each round <i>in otder they were dealt</i>. In all other dealer settings, the dealer, after a bet is made, chooses any of the remaining cards to play.
+	</p>
+	<p>
+	The expert dealer usually plays the card that minimizes the bettor's potential winnings. The beginner dealer plays a card that may or may not be optimal.
+	</p>
+	<p>
+	  The human dealer allows a person choose the card to play after the bet is revealed. When it is time to play a card, the human dealer clicks on one of the cards remaining on the board to play it. If the bettor and dealer are both set to "human" and are different people, the game becomes a competition between the two players.
+	</p>
+      </div>
+      <div>
+      </div>
+      <div>
+	<p>
+	  Option 5: allowing the bettor to bet on either color. When using this option, the bettor can select either red or black as the color of the card he is betting on. To choose this option, set the check box labeled "Bet on red or black".
+	</p>
+      </div>
+      <div>
+      </div>
+      <div>
+	<p>
+	  To play a game, Set the game parameters at the top of the game page and click "Apply". Below the board where the cards are displayed, there will be messages guiding you when input is required. At the end of the game, a summary of the bet results and bettor's total winnings and bankroll are shown. Clicking "OK" will then restart the game with the same parameters. To change the parameters, edit the settings at the top of the page and click "Apply".
+	</p>
+      </div>
+    </div>
+  </div>
+  <h2>Analyzing Betting on Red</h2>
+  <div class="section">
+    <div class="content">
+      <div>
+	<p>
+	  Since the two-player Betting on Red game is a finite, sequential game with perfect information and no random moves, it can be analyzed using <i>backward induction</i>, i.e. working backwards from the end position. To get an idea how thi works start with the trivial case of a pack of one red card (no black cards). It is easy to see that the bettor can maximize his winnings by betting his entire bankroll. The dealer can do no better than allow hime to win. Thus if the bettor starts with <i>m</i> units, the equilibrium value of this game is <i>2m</i>.
+	</p>
+      </div>
+      <div>
+      </div>
+      <div>
+	<p>
+	  Another trivial case is if the pack has one black card and the bettor start s with <i>m</i> units. It is easy to see the equilibrium bet is to not bet and that the equilibrium value is <i>m</i>.
+	  With these two cases analyzed, try the case with a pack of two carss, one red and one black where the bettor starts with <i>m</i> units.
+	</p>
+      </div>
+      <div>
+      </div>
+    </div>	
+  </div>
+  <h2>The Laboratory</h2>
+  <div class="section">
+    <div class="content">
+      <div>
+	<p>The laboratory provides more control and displays nore information about the Betting on Red game and its variations.  The added information includes the equilibrium bets and the game equilibrium value. It also adds the ability to restrict the bettor's money and the wager amounts to integer values. This provides an interesting new version to analyze. The restriction to integers makes calculating the equilibrium values more involved. To play this version check "Integer units only" option in the game settings.
+	</p>
+      </div>
+      <div>
+      </div>
+      <div>
+	<p>
+	  The laboratory adds one more option to each the bettor and dealer. The option names is "Equilibrium" and if chosen, then player automatically takes the equilibrium action on their turn.
+	  Finally, there is an undo capability to make it easier to try alternative bets and card plays to see how they affect the game. Combined with the displaying od the equilibrium bets and value makes it easy to see the negative effect of deviating from the equilibrium strategy. 
+	</p>
+      </div>
+    </div>
+  </div>
+  <div>
+    Try out the laboratory <a href="lab.html">here</a>.
+  </div>
+  <div style="margin-bottom: 20px:">
+  </div>
+  </body>
+  <script>
+    window.onload = function() {
+	configure_game({fractional: true, bet_red_or_black: false, num_cards: 6, num_red: 3, bettor_money: new Rational(100)});
+	configure_players({bettor: 'human', dealer: 'shuffle'});
+	configure_info({recommend_equilibrium: false, show_equilibrium: false});
+	undo_enabled = false;
+	set_focus = false;
+	play();
+    }
+  </script>
+</html>
