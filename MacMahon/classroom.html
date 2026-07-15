@@ -1,10 +1,13 @@
 <!doctype html>
 
 <html>
-<head>
+  <head>
     <title>MacMahon's 24 Squares</title>
     <script src="./utils.js"></script>
     <script src="./classroom.js"></script>
+
+    <link rel="icon" type="image/png" sizes="32x32" href="../fun-math-icon.png">
+
     <style>
       .section {
 	  margin-left: 18px;
@@ -28,276 +31,277 @@
 	  gap: 0px 18px;
       }
     </style>
-</head>
-<body style="background-color:#c0c0c0">
+  </head>
+  <body style="background-color:#c0c0c0">
     <div style="position: absolute; top: 6px; left: 20px;"><a href="../about.html"><img src="../fun-math-club.gif"/></a></div>
-  <div>
-    <h1 style="margin-top: 40px; margin-bottom: 40px; text-align:center">MacMahon's 24 Squares</h1>
-    <h2>MacMahon's Squares</h2>
-    <div class="section">
-      <p>
-	In his book <a href="https://archive.org/details/newmathematicalp00macmuoft/page/24/mode/2up">New Mathemartical Pastimes</a>, Percy MacMahon described a puzzle that is comprised of 24 square tiles, each tile subdivided by its two diagonals into four isosceles right triangles called <i>compartments</i>. Each compartment is colored in one of three colors. Assuming that tiles with the same color pattern when
-	rotated are considred the same, there are 24 distinct tiles as pictured below. (In actuality MacMahon labeled the compartments with integers 1 to 3; his book was published at a time when color printing was much less common than it is today.)
-      </p>
-      <p>
-	A set of MacMahon tiles using the colors red, yellow, and blue is shown below. The tiles are arranged to form a 4x6 rectangle.
-      </p>
-      <div style="text-align:center">
-	<canvas id="board24" width="600" height="400" style="border:0px solid #c0c0c0;border-radius: 5px;background: #c0c0c0;"></canvas>
-      </div>
-      <p>
-	A tile has one of four types based on its color pattern:
-	<ol>
-	  <li><i>square</i>:
-	    all compartments the same color</li>
-	  <li><i>pentagon</i>:
-	    exactly three compartments are the same color</li>
-	  <li><i>triangle</i>:
-	    at most 2 compartments of any color and two adjacent compartments are the same color</li>
-	  <li><i>hourglass</i>:
-	    at most 2 compartments of any color and two nonadjacent compartments are the same color</li>
-	</ol>
-	Triangle and hourglass types are <i>pure</i> or <i>mixed</i> if they contain all two or three colors, respectively. The tiles pictured below are the red square tile, the red pentagon tiles, the red triangle tiles, and the red hourglass tiles. The middle two triangle tiles and the middle hourglass tile are mixed.
-      </p>
-      <table style="text-align:center">
-	<tr>
-	  <td>square</td>
-	  <td><span style="margin-left: 20px;"/>pentagon</td>
-	  <td><span style="margin-left: 20px;"/>triangle</td>
-	  <td><span style="margin-left: 20px;"/>hourglass</td>
-	</tr>
-	<tr>
-	  <td><canvas id="squaretype" width="75" height="75" style="border:0px solid #c0c0c0;border-radius: 5px;background: #c0c0c0;"></canvas></td>
-	  <td><canvas id="pentagontype" width="150" height="75" style="border:0px solid #c0c0c0;border-radius: 5px;background: #c0c0c0; margin-left: 20px;"></canvas></td>
-	  <td><canvas id="triangletype" width="300" height="75" style="border:0px solid #c0c0c0;border-radius: 5px;background: #c0c0c0; margin-left: 20px;"></canvas></td>
-	  <td><canvas id="hourglasstype" width="225" height="75" style="border:0px solid #c0c0c0;border-radius: 5px;background: #c0c0c0; margin-left: 20px;"></canvas></td>
-	</tr>
-      </table>
-    </div>
-    <h2 id="tilings-contact-boundary">Tilings, Contact Systems, and Boundary Varieties</h2>
-    <div class="section">
-      <p>
-	In a rectangular arrangement of the tiles, the <i>contact type</i> of a pair of tiles that share an edge is the pair of colors (<i>mates</i>) in the compartment on that shared edge. A <i>contact system</i> is a set of contact types that uniquely defines each color's mate.
-	With three colors there are a contact system is one of two possible sets of contact types (1) each color is its own mate, or (2) one color is its own mate and the other two colors are mates. A <i>tiling</i> with a given contact system is a rectangular arrangement of tiles all of whose contact types belong to the contact system.
-	A contact system is represented graphically using pairs of isosceles right triangles each pair colored using color mates.
-      </p>
-      <p>
-	The <i>boundary variety</i> of a tiling is the pattern of colors of the compartments on the border of the rectangle.
-      </p>
-      <p>
-	The examples below show two tilings. Each tiling is followed by the graphical representations of its boundary variety and contact system.
-      </p>
-      <div style="text-align: center; margin-top: 20px;">
-	<canvas id="rectangle111" width="225" height="150" style="border:0px solid #ccc;border-radius: 0px;background: #000000;"></canvas>
-	<canvas id="variety111" width="150" height="160" style="border:0px solid #ccc;border-radius: 5px;background: black; margin-left:20px;;"></canvas>
-	<canvas id="rectangle12" width="225" height="150" style="border:0px solid #ccc;border-radius: 0px;background: #000000; margin-left:60px;"></canvas>
-	<canvas id="variety12" width="150" height="160" style="border:0px solid #ccc;border-radius: 5px;background: black; margin-left:20px;"></canvas>
-      </div>
-    </div>
-    <h2>The Classic Puzzle</h2>
-    <div class="section">
-      <div class="content">
-	<div>
-	  <p>
-	    The classic puzzle, that was posed without solution in MacMahon's book, is to tile a 4x6 rectangle with the 24 tiles such that (1) the compartments on the border of the rectangle are all the same color, and (2) if two tiles share an edge, the compartments on each side of the edge are the same color. In our terminology, condition (1) is eqiuvalent to stating that the boundary variety consists of only one color. (2) is equivalent to stating that in the contact system, every color is its own mate.
-	  </p>
-	  <p>
-	    The total number of solutions to this puzzle is 106624. If rotations and reflections count as the same, the number of distinct solutions is 106624/4=26656. Finally, if we count solutions where blue and yellow are interchanged as the same, the number of distinct tilings is 26656 / 2 = 13328. It is interesting to note that an early computer search for solutions in 1964 found just 12261 solutions, which many print and online sources incorrectly give as the number of solutions.
-	  </p>
-	  <p>
-	    Despite the large number of solutions this puzzle can be quite challenging without some careful thought and an organized approach to attacking the problem. Click on the puzzle to the right to try it for yourself.
-	  </p>
+    <div>
+      <h1 style="margin-top: 40px; margin-bottom: 40px; text-align:center">MacMahon's 24 Squares</h1>
+      <h2>MacMahon's Squares</h2>
+      <div class="section">
+	<p>
+	  In his book <a href="https://archive.org/details/newmathematicalp00macmuoft/page/24/mode/2up">New Mathemartical Pastimes</a>, Percy MacMahon described a puzzle that is comprised of 24 square tiles, each tile subdivided by its two diagonals into four isosceles right triangles called <i>compartments</i>. Each compartment is colored in one of three colors. Assuming that tiles with the same color pattern when
+	  rotated are considred the same, there are 24 distinct tiles as pictured below. (In actuality MacMahon labeled the compartments with integers 1 to 3; his book was published at a time when color printing was much less common than it is today.)
+	</p>
+	<p>
+	  A set of MacMahon tiles using the colors red, yellow, and blue is shown below. The tiles are arranged to form a 4x6 rectangle.
+	</p>
+	<div style="text-align:center">
+	  <canvas id="board24" width="600" height="400" style="border:0px solid #c0c0c0;border-radius: 5px;background: #c0c0c0;"></canvas>
 	</div>
+	<p>
+	  A tile has one of four types based on its color pattern:
+	  <ol>
+	    <li><i>square</i>:
+	      all compartments the same color</li>
+	    <li><i>pentagon</i>:
+	      exactly three compartments are the same color</li>
+	    <li><i>triangle</i>:
+	      at most 2 compartments of any color and two adjacent compartments are the same color</li>
+	    <li><i>hourglass</i>:
+	      at most 2 compartments of any color and two nonadjacent compartments are the same color</li>
+	  </ol>
+	  Triangle and hourglass types are <i>pure</i> or <i>mixed</i> if they contain all two or three colors, respectively. The tiles pictured below are the red square tile, the red pentagon tiles, the red triangle tiles, and the red hourglass tiles. The middle two triangle tiles and the middle hourglass tile are mixed.
+	</p>
+	<table style="text-align:center">
+	  <tr>
+	    <td>square</td>
+	    <td><span style="margin-left: 20px;"/>pentagon</td>
+	    <td><span style="margin-left: 20px;"/>triangle</td>
+	    <td><span style="margin-left: 20px;"/>hourglass</td>
+	  </tr>
+	  <tr>
+	    <td><canvas id="squaretype" width="75" height="75" style="border:0px solid #c0c0c0;border-radius: 5px;background: #c0c0c0;"></canvas></td>
+	    <td><canvas id="pentagontype" width="150" height="75" style="border:0px solid #c0c0c0;border-radius: 5px;background: #c0c0c0; margin-left: 20px;"></canvas></td>
+	    <td><canvas id="triangletype" width="300" height="75" style="border:0px solid #c0c0c0;border-radius: 5px;background: #c0c0c0; margin-left: 20px;"></canvas></td>
+	    <td><canvas id="hourglasstype" width="225" height="75" style="border:0px solid #c0c0c0;border-radius: 5px;background: #c0c0c0; margin-left: 20px;"></canvas></td>
+	  </tr>
+	</table>
+      </div>
+      <h2 id="tilings-contact-boundary">Tilings, Contact Systems, and Boundary Varieties</h2>
+      <div class="section">
+	<p>
+	  In a rectangular arrangement of the tiles, the <i>contact type</i> of a pair of tiles that share an edge is the pair of colors (<i>mates</i>) in the compartment on that shared edge. A <i>contact system</i> is a set of contact types that uniquely defines each color's mate.
+	  With three colors there are a contact system is one of two possible sets of contact types (1) each color is its own mate, or (2) one color is its own mate and the other two colors are mates. A <i>tiling</i> with a given contact system is a rectangular arrangement of tiles all of whose contact types belong to the contact system.
+	  A contact system is represented graphically using pairs of isosceles right triangles each pair colored using color mates.
+	</p>
+	<p>
+	  The <i>boundary variety</i> of a tiling is the pattern of colors of the compartments on the border of the rectangle.
+	</p>
+	<p>
+	  The examples below show two tilings. Each tiling is followed by the graphical representations of its boundary variety and contact system.
+	</p>
+	<div style="text-align: center; margin-top: 20px;">
+	  <canvas id="rectangle111" width="225" height="150" style="border:0px solid #ccc;border-radius: 0px;background: #000000;"></canvas>
+	  <canvas id="variety111" width="150" height="160" style="border:0px solid #ccc;border-radius: 5px;background: black; margin-left:20px;;"></canvas>
+	  <canvas id="rectangle12" width="225" height="150" style="border:0px solid #ccc;border-radius: 0px;background: #000000; margin-left:60px;"></canvas>
+	  <canvas id="variety12" width="150" height="160" style="border:0px solid #ccc;border-radius: 5px;background: black; margin-left:20px;"></canvas>
+	</div>
+      </div>
+      <h2>The Classic Puzzle</h2>
+      <div class="section">
+	<div class="content">
+	  <div>
+	    <p>
+	      The classic puzzle, that was posed without solution in MacMahon's book, is to tile a 4x6 rectangle with the 24 tiles such that (1) the compartments on the border of the rectangle are all the same color, and (2) if two tiles share an edge, the compartments on each side of the edge are the same color. In our terminology, condition (1) is eqiuvalent to stating that the boundary variety consists of only one color. (2) is equivalent to stating that in the contact system, every color is its own mate.
+	    </p>
+	    <p>
+	      The total number of solutions to this puzzle is 106624. If rotations and reflections count as the same, the number of distinct solutions is 106624/4=26656. Finally, if we count solutions where blue and yellow are interchanged as the same, the number of distinct tilings is 26656 / 2 = 13328. It is interesting to note that an early computer search for solutions in 1964 found just 12261 solutions, which many print and online sources incorrectly give as the number of solutions.
+	    </p>
+	    <p>
+	      Despite the large number of solutions this puzzle can be quite challenging without some careful thought and an organized approach to attacking the problem. Click on the puzzle to the right to try it for yourself.
+	    </p>
+	  </div>
+	  <div style="text-align:center;" >
+	    <a href="puzzle.html">
+	      <canvas id="puzzlevariety" width="300" height="260" style="border:0px solid #ccc;border-radius: 5px;background: black;"></canvas>
+	    </a>
+	  </div>
+	</div>
+      </div>
+      <h2>More Tilings</h2>
+      <div class="section">
+	<p>One can imagine endless variations of the classic puzzle where the puzzle asks for a tiling of a rectangle a given boundary variety and contact system. Of course some will have no solution. For example, it is not possible to complete the tilings in the the three puzzle below. Can you prove each of the three puzzles below is not possible to tile?
+	</p>
 	<div style="text-align:center;" >
-	  <a href="puzzle.html">
-	    <canvas id="puzzlevariety" width="300" height="260" style="border:0px solid #ccc;border-radius: 5px;background: black;"></canvas>
+	  <canvas id="puzzle46-21" width="180" height="160" style="border:0px ;border-radius: 0px; background: black; margin:0;"></canvas>
+	  <canvas id="puzzle38-111" width="240" height="130" style="border:0px solid #ccc;border-radius: 0px;background: black; margin-left: 20px;"></canvas>
+	  <canvas id="puzzle212-12" width="360" height="90" style="border:0px solid #ccc;border-radius: 0px;background: black; margin-left: 20px;"></canvas>
+	</div>
+	<p>
+	  The puzzles below are possible; click on the diagram to try solving the puzzle.
+	</p>
+	<div style="text-align:center;" >
+	  <a href="puzzle.html?tiles=24&dims=4x6&variety=00000000000000000000&contact=C12">
+	    <canvas id="puzzle46-12" width="300" height="260" style="border:0px solid #ccc;border-radius: 5px;background: black;"></canvas>
+	  </a>
+	  <a href="puzzle.html?tiles=24&dims=3x8&variety=0000111122200001111222&contact=C111">
+	    <canvas id="puzzle38-111-2" width="400" height="210" style="border:0px solid #ccc;border-radius: 5px;background: black;  margin-left: 20px;"></canvas>
+	  </a>
+	</div>
+	<div style=" text-align:center; margin-top: 20px;">
+	  <a href="puzzle.html?tiles=24&dims=2x12&variety=0000111122220100001111222201&contact=C21">
+	    <canvas id="puzzle212-21-3" width="600" height="160" style="border:0px solid #ccc;border-radius: 5px;background: black;"></canvas>
 	  </a>
 	</div>
       </div>
-    </div>
-    <h2>More Tilings</h2>
-    <div class="section">
-      <p>One can imagine endless variations of the classic puzzle where the puzzle asks for a tiling of a rectangle a given boundary variety and contact system. Of course some will have no solution. For example, it is not possible to complete the tilings in the the three puzzle below. Can you prove each of the three puzzles below is not possible to tile?
-      </p>
-      <div style="text-align:center;" >
-	<canvas id="puzzle46-21" width="180" height="160" style="border:0px ;border-radius: 0px; background: black; margin:0;"></canvas>
-	<canvas id="puzzle38-111" width="240" height="130" style="border:0px solid #ccc;border-radius: 0px;background: black; margin-left: 20px;"></canvas>
-	<canvas id="puzzle212-12" width="360" height="90" style="border:0px solid #ccc;border-radius: 0px;background: black; margin-left: 20px;"></canvas>
+      <h2>Other Tile Sets</h2>
+      <div class="section">
+	<p style="margin-bottom: 20px;">
+	  MacMahon also suggested puzzles whose tile set is a subsets of the 24 tiles. The specific subsets he suggested are shown below.
+	</p>
+	<table>
+	  <colgroup>
+	    <col style="width: 10%;">
+	    <col style="width: 35%;">
+	    <col style="width: 10%;">
+	    <col style="width: 35%;">
+	    <col style="width: 10%;">
+	  </colgroup>
+	  <tr>
+	    <td/>
+	    <td>20 tiles (remove the red square, the pure blue/yellow triangle and hourglass tiles and the mixed red hourglass tile)
+	    <td/>
+	    <td>16 tiles (from the 20 tile set, remove the hourglass tiles)</td>
+	    <td/>
+	  </tr>
+	  <tr>
+	    <td/>
+	    <td><canvas id="board20" width="375" height="300" style="border:0px solid #c0c0c0;border-radius: 5px;background: #c0c0c0;"></canvas></td>
+	    <td/>
+	    <td><canvas id="board16" width="300" height="300" style="border:0px solid #c0c0c0;border-radius: 5px;background: #c0c0c0;"></canvas></td>
+	    <td/>
+	  </tr>
+	</table>
+	<table style="margin-top:20px;">
+	  <colgroup>
+	    <col style="width: 10%;">
+	    <col style="width: 35%;">
+	    <col style="width: 10%;">
+	    <col style="width: 35%;">
+	    <col style="width: 10%;">
+	  </colgroup>
+	  <tr>
+	    <td/>
+	    <td>15 tiles (from 16 tile set, remove the blue square, yellow square, and add the pure blue/yellow triangle tiles)</td>
+	    <td/>
+	    <td>9 tiles: the pentagon and the pure triangle tiles
+	    <td/>
+	  </tr>
+	  <tr>
+	    <td/>
+	    <td><canvas id="board15" width="375" height="225" style="border:0px solid #c0c0c0;border-radius: 5px;background: #c0c0c0;"></canvas></td>
+	    <td/>
+	    <td><canvas id="board9" width="225" height="225" style="border:0px solid #c0c0c0;border-radius: 5px;background: #c0c0c0;"></canvas></td>
+	    <td/>
+	  </tr>
+	</table>
       </div>
-      <p>
-	The puzzles below are possible; click on the diagram to try solving the puzzle.
-      </p>
-      <div style="text-align:center;" >
-	<a href="puzzle.html?tiles=24&dims=4x6&variety=00000000000000000000&contact=C12">
-	  <canvas id="puzzle46-12" width="300" height="260" style="border:0px solid #ccc;border-radius: 5px;background: black;"></canvas>
-	</a>
-	<a href="puzzle.html?tiles=24&dims=3x8&variety=0000111122200001111222&contact=C111">
-	  <canvas id="puzzle38-111-2" width="400" height="210" style="border:0px solid #ccc;border-radius: 5px;background: black;  margin-left: 20px;"></canvas>
-	</a>
-      </div>
-      <div style=" text-align:center; margin-top: 20px;">
-	<a href="puzzle.html?tiles=24&dims=2x12&variety=0000111122220100001111222201&contact=C21">
-	  <canvas id="puzzle212-21-3" width="600" height="160" style="border:0px solid #ccc;border-radius: 5px;background: black;"></canvas>
-	</a>
-      </div>
-    </div>
-    <h2>Other Tile Sets</h2>
-    <div class="section">
-      <p style="margin-bottom: 20px;">
-	MacMahon also suggested puzzles whose tile set is a subsets of the 24 tiles. The specific subsets he suggested are shown below.
-      </p>
-      <table>
-	<colgroup>
-	  <col style="width: 10%;">
-	  <col style="width: 35%;">
-	  <col style="width: 10%;">
-	  <col style="width: 35%;">
-	  <col style="width: 10%;">
-	</colgroup>
-	<tr>
-	  <td/>
-	  <td>20 tiles (remove the red square, the pure blue/yellow triangle and hourglass tiles and the mixed red hourglass tile)
-	  <td/>
-	  <td>16 tiles (from the 20 tile set, remove the hourglass tiles)</td>
-	  <td/>
-	</tr>
-	<tr>
-	  <td/>
-	  <td><canvas id="board20" width="375" height="300" style="border:0px solid #c0c0c0;border-radius: 5px;background: #c0c0c0;"></canvas></td>
-	  <td/>
-	  <td><canvas id="board16" width="300" height="300" style="border:0px solid #c0c0c0;border-radius: 5px;background: #c0c0c0;"></canvas></td>
-	  <td/>
-	</tr>
-      </table>
-      <table style="margin-top:20px;">
-	<colgroup>
-	  <col style="width: 10%;">
-	  <col style="width: 35%;">
-	  <col style="width: 10%;">
-	  <col style="width: 35%;">
-	  <col style="width: 10%;">
-	</colgroup>
-	<tr>
-	  <td/>
-	  <td>15 tiles (from 16 tile set, remove the blue square, yellow square, and add the pure blue/yellow triangle tiles)</td>
-	  <td/>
-	  <td>9 tiles: the pentagon and the pure triangle tiles
-	  <td/>
-	</tr>
-	<tr>
-	  <td/>
-	  <td><canvas id="board15" width="375" height="225" style="border:0px solid #c0c0c0;border-radius: 5px;background: #c0c0c0;"></canvas></td>
-	  <td/>
-	  <td><canvas id="board9" width="225" height="225" style="border:0px solid #c0c0c0;border-radius: 5px;background: #c0c0c0;"></canvas></td>
-	  <td/>
-	</tr>
-      </table>
-    </div>
-    <h2 id="bicolor-symmetry">Color and Bicolor Symmetry of Rectangle Tilings</h2>
-    <div class="section">
-      <div class="content">
+      <h2 id="bicolor-symmetry">Color and Bicolor Symmetry of Rectangle Tilings</h2>
+      <div class="section">
+	<div class="content">
+	  <div>
+	    <p>
+	      No tiling of a rectangle other than 1x1 has a 180&deg; rotational symmetry (any tile except the center one would have to occur twice). Some tilings, however, have a horizontal or a vertical mirror symmetry. For example, the tiling below has a horizontal symmetry. In general, a tiled rectangle with mirror symmetry will consist of (1) square, pentagon or pure hourclass tiles, i.e. tiles having a mirror symmetry, the tilings's line of symmetry and (2) mixed triangle tiles, i.e. tiles whose mirror image is a different MacMahon tile, off the line of symmetry. An example is shown to the right.
+	    </p>
+	  </div>
+	  <dir style="display: flex; justify-content: center; align-item: center;">
+	    <canvas id="horizontalsymmetry" width="225" height="150" style="border:0px solid #ccc;border-radius: 5px;background: black;"></canvas>
+	</div>
 	<div>
 	  <p>
-	    No tiling of a rectangle other than 1x1 has a 180&deg; rotational symmetry (any tile except the center one would have to occur twice). Some tilings, however, have a horizontal or a vertical mirror symmetry. For example, the tiling below has a horizontal symmetry. In general, a tiled rectangle with mirror symmetry will consist of (1) square, pentagon or pure hourclass tiles, i.e. tiles having a mirror symmetry, the tilings's line of symmetry and (2) mixed triangle tiles, i.e. tiles whose mirror image is a different MacMahon tile, off the line of symmetry. An example is shown to the right.
+	    To allow for a wider variety of tilings with a "symmetry", we will say a tiling has <i>bicolor symmetry</i> if the tiling is <i>antisymmetric</i> in two colors, i.e. if every pair of symmetric compartments is either one each of the two colors or both the third color. With this definition there are rotational and mirror bicolor symmetric tilings with many subsets of the MacMahon tiles.
 	  </p>
-	</div>
-	<dir style="display: flex; justify-content: center; align-item: center;">
-	  <canvas id="horizontalsymmetry" width="225" height="150" style="border:0px solid #ccc;border-radius: 5px;background: black;"></canvas>
-      </div>
-      <div>
-	<p>
-	  To allow for a wider variety of tilings with a "symmetry", we will say a tiling has <i>bicolor symmetry</i> if the tiling is <i>antisymmetric</i> in two colors, i.e. if every pair of symmetric compartments is either one each of the two colors or both the third color. With this definition there are rotational and mirror bicolor symmetric tilings with many subsets of the MacMahon tiles.
-	</p>
-	<p>
-	  The examples below show one tiling with a rotational bicolor symmetry and one with a mirror bicolor symmetry. The graphical symbol for these bicolor symmetry types is at the center of the boundary variety rectangle diagram.
-	</p>
-	<div style="text-align:center;" >
-	  <canvas id="rotationalsym15" width="225" height="225" style="border:0px solid #ccc;border-radius: 5px;background: black;"></canvas>
-	  <canvas id="varietyrot" width="150" height="210" style="border:0px solid #ccc;border-radius: 5px;background: black; margin-left:20px;"></canvas>
-	  <canvas id="mirrorsym6" width="225" height="150" style="border:0px solid #ccc;border-radius: 5px;background: black; margin-left:60px;"></canvas>
-	  <canvas id="varietymirror" width="150" height="160" style="border:0px solid #ccc;border-radius: 5px;background: black; margin-left:20px;"></canvas>
+	  <p>
+	    The examples below show one tiling with a rotational bicolor symmetry and one with a mirror bicolor symmetry. The graphical symbol for these bicolor symmetry types is at the center of the boundary variety rectangle diagram.
+	  </p>
+	  <div style="text-align:center;" >
+	    <canvas id="rotationalsym15" width="225" height="225" style="border:0px solid #ccc;border-radius: 5px;background: black;"></canvas>
+	    <canvas id="varietyrot" width="150" height="210" style="border:0px solid #ccc;border-radius: 5px;background: black; margin-left:20px;"></canvas>
+	    <canvas id="mirrorsym6" width="225" height="150" style="border:0px solid #ccc;border-radius: 5px;background: black; margin-left:60px;"></canvas>
+	    <canvas id="varietymirror" width="150" height="160" style="border:0px solid #ccc;border-radius: 5px;background: black; margin-left:20px;"></canvas>
+	  </div>
 	</div>
       </div>
+      <h2 id="percys-puzzles">Percy's Puzzles</h2>
+      <div class="section">
+	<p>
+	  In honor of Percy MacMahon, <i>Percy's Puzzle</i> is a rectangle tiling problem that uses a given subset of tiles and specifies a goal, namely the <a href="#tilings-contact-boundary">boundary variety</a>, <a href="#tilings-contact-boundary">contact system</a>, and <a href="#bicolor-symmetry">bicolor symmetry</a> to be satisfied by the tiling. In addition, the goal may include the specific placement of <i>frozen</i> tiles. Frozen tiles are marked by a white border and may not be moved. The solution to the puzzle is unique given the goal.
+	</p>
+	<p>
+	  While solving the puzzle, the player may opt to receive a <i>hint</i>. Only one hint per puzzle is offered. The hint marks correctly placed tiles with a white border.
+	  It may also reveal additional tile locations depending on how much progress the player has made tworads the goal. The hint is not immediately available, but will become available
+	  after the player has made some progress towards the goal. The hint remains available until the puzzle is solved.
+	</p>
+	<p>
+	  Tne player receives a score that has two numbers: (1) the number of moves and (2) a numeric point score based on how close the finial tiling is to the goal. The score is computed by adding one point for each contact made correctly, two points for each correct boundary color, and three points for attaining the goal's symmetry.
+	</p>
+	<p>
+	  On the online Percy's Puzzle page, a player moves tiles by either (1) clicking or tapping on a tile to rotate it, or (2) dragging a tile to a new position in the rectangle. When dragging, the tile that was in the new position is moved to where the dragged tile was. When cliking to rotate, if the shift key is held down, the roation is clockwise, and otherwise, counterclockwise.
+	</p>
+	<p>
+	  The puzzle page displays progress towards the goal in two ways: (1) a <i>map</i> that shows which compartments satisfy the contact system and boundary variety, and (2) a <i>graph</i> that shows the history of the player's score, number of moves made, and the move when the hint was used (if it was). Clicking on the map or the graph toggles between the two progress displays.
+	</p>
+	<p>
+	  Below the tiling are three color buttons that allow the user to change the colors, and a button to reset to the default red, yellow, and blue colors.
+	</p>
+	<p>
+	  On the Percy's Puzzle page, below the puzzle are buttons that allow you to change the color sceme to your liking, or to reset back to the default colors.
+	</p>
+	<table style="margin-top: 46px">
+	  <colgroup>
+	    <col style="width: 40%;">
+	    <col style="width: 20%;">
+	    <col style="width: 40%;">
+	  </colgroup>
+	  <tr>
+	    <td style=" text-align: center;">
+	      A Percy's Puzzle page with the progress map (click on it to try a puzzle!).
+	    </td><td>
+	    </td><td style=" text-align: center;">
+	      The page display including the progress graph after the hint was used.
+	    </td>
+	  </tr><tr>
+	    <td style="vertical-align: top; text-align: center;">
+	      <a href=percy.html?puzzle="dIGN1On}4U{Vy.c"><img src="percy-map.png" alt="Percy puzzle" width="610" height="820" style="border: 2px solid white;"/></a>
+	    </td><td>
+	    </td><td style="vertical-align: top; text-align: center;">
+	      <img src="percy-graph.png" alt="Hints and graph" width="610" height="820" style="border: 2px solid white;"/>
+	    </td>
+	  </tr>
+	</table>
+      </div>
+      <h2>The Laboratory</h2>
+      <div class="section">
+	<p>
+	  The MacMahon squares laboratory lets the user construct tilings with different sets of tiles. At the top of the page, the user can choose the set of tiles and the dimensions of the rectangle to be tiled. Next the user can choose the boundary variety of the goal tiling. Initially, the boundary variety compartments (triangles) are all <i>don't care</i> compartments. . A don't care compartment is colored gray and may be any color in the tiling. Clicking on a triangle in the goal variety will cycle through the possible colors including gray for the don't care case. Below the goal boundary variety is the goal contact system. Clicking on the contact system cycles through the possible systems.
+	</p>
+	<p>
+	  Once the tiles, dimensions, and the goal have been set, the user can search for a tiling matching the goal. To freeze a tile in its current position, click on the "Freeze/unfreeze a tile" button and then click on the tile. Doing this again will unfreeze the tile. When a tile on the border of the tiling is frozen, the colors in the goal boundary variety in that tile are also frozen. As a result, if the user freezes a tile with a nonmatching boundary variety triangle, it will not be possible to complete the tiling successfully. (To correct this, unfreeze the tile and either change the boundary variety triangle color or change the tile in that position.) 
+	</p>
+	<p>
+	  If a tiling is successfully completed, then below the tiling a <i>puzzle code</i> will be displayed.
+	  A puzzle code is a string of characters that encodes the goal and tiling. If there are don't care triangles in boundary variety goal, they will be replaced in the encoded puzzle goal by the actual color in the tiling. Any symmetry that the tiling has will be added to the goal in the encoded puzzle.
+	</p>
+	<p>
+	  The puzzle code may be passed as an argument to javascript code used in these pages or in a query string to with key "puzzle" to the webpage "percy.html" to create a Percy's Puzzle web page. If being used in a query string, set the check on the "URI safe" button. The "Copy to clipboard" button makes it easy to paste the puzzle code into the browser web page address or anywhere you wish to indert it.
+	</p>
+	<p>
+	  Displaying the puzzle using the percy.html web page with a query string may use different colors than the ones in the tiling created in the laboratory (they will be a permutation of the colors). Also, there will be "Solve" button present which allows the user to have the solution in the puzzle code to be displayed. It is also important to note that there may be more than one solution and the application recognizes any tiling satisfying the goal as a solution.
+	</p>
+	<p>
+	  Try this link created using a puzzle code generated in the lab: <a href="percy.html?puzzle=c%5E%5B%5DbSRQ86">percy.html?puzzle=c%5E%5B%5DbSRQ86</a>. This puzzle has 320 solutions!
+	</p>
+	<p>
+	  If you want to go directly to the laboratory, click <a href="lab.html">here</a>.
+	</p>
+      </div>
     </div>
-    <h2 id="percys-puzzles">Percy's Puzzles</h2>
-    <div class="section">
-      <p>
-	In honor of Percy MacMahon, <i>Percy's Puzzle</i> is a rectangle tiling problem that uses a given subset of tiles and specifies a goal, namely the <a href="#tilings-contact-boundary">boundary variety</a>, <a href="#tilings-contact-boundary">contact system</a>, and <a href="#bicolor-symmetry">bicolor symmetry</a> to be satisfied by the tiling. In addition, the goal may include the specific placement of <i>frozen</i> tiles. Frozen tiles are marked by a white border and may not be moved. The solution to the puzzle is unique given the goal.
-      </p>
-      <p>
-	While solving the puzzle, the player may opt to receive a <i>hint</i>. Only one hint per puzzle is offered. The hint marks correctly placed tiles with a white border.
-	It may also reveal additional tile locations depending on how much progress the player has made tworads the goal. The hint is not immediately available, but will become available
-	after the player has made some progress towards the goal. The hint remains available until the puzzle is solved.
-      </p>
-      <p>
-	Tne player receives a score that has two numbers: (1) the number of moves and (2) a numeric point score based on how close the finial tiling is to the goal. The score is computed by adding one point for each contact made correctly, two points for each correct boundary color, and three points for attaining the goal's symmetry.
-      </p>
-      <p>
-	On the online Percy's Puzzle page, a player moves tiles by either (1) clicking or tapping on a tile to rotate it, or (2) dragging a tile to a new position in the rectangle. When dragging, the tile that was in the new position is moved to where the dragged tile was. When cliking to rotate, if the shift key is held down, the roation is clockwise, and otherwise, counterclockwise.
-      </p>
-      <p>
-	The puzzle page displays progress towards the goal in two ways: (1) a <i>map</i> that shows which compartments satisfy the contact system and boundary variety, and (2) a <i>graph</i> that shows the history of the player's score, number of moves made, and the move when the hint was used (if it was). Clicking on the map or the graph toggles between the two progress displays.
-      </p>
-      <p>
-	Below the tiling are three color buttons that allow the user to change the colors, and a button to reset to the default red, yellow, and blue colors.
-      </p>
-      <p>
-	On the Percy's Puzzle page, below the puzzle are buttons that allow you to change the color sceme to your liking, or to reset back to the default colors.
-      </p>
-      <table style="margin-top: 46px">
-	<colgroup>
-	  <col style="width: 40%;">
-	  <col style="width: 20%;">
-	  <col style="width: 40%;">
-	</colgroup>
-	<tr>
-	  <td style=" text-align: center;">
-	    A Percy's Puzzle page with the progress map (click on it to try a puzzle!).
-	  </td><td>
-	  </td><td style=" text-align: center;">
-	    The page display including the progress graph after the hint was used.
-	  </td>
-	</tr><tr>
-	  <td style="vertical-align: top; text-align: center;">
-	    <a href=percy.html?puzzle="dIGN1On}4U{Vy.c"><img src="percy-map.png" alt="Percy puzzle" width="610" height="820" style="border: 2px solid white;"/></a>
-	  </td><td>
-	  </td><td style="vertical-align: top; text-align: center;">
-	    <img src="percy-graph.png" alt="Hints and graph" width="610" height="820" style="border: 2px solid white;"/>
-	  </td>
-	</tr>
-      </table>
-    </div>
-    <h2>The Laboratory</h2>
-    <div class="section">
-      <p>
-	The MacMahon squares laboratory lets the user construct tilings with different sets of tiles. At the top of the page, the user can choose the set of tiles and the dimensions of the rectangle to be tiled. Next the user can choose the boundary variety of the goal tiling. Initially, the boundary variety compartments (triangles) are all <i>don't care</i> compartments. . A don't care compartment is colored gray and may be any color in the tiling. Clicking on a triangle in the goal variety will cycle through the possible colors including gray for the don't care case. Below the goal boundary variety is the goal contact system. Clicking on the contact system cycles through the possible systems.
-      </p>
-      <p>
-	Once the tiles, dimensions, and the goal have been set, the user can search for a tiling matching the goal. To freeze a tile in its current position, click on the "Freeze/unfreeze a tile" button and then click on the tile. Doing this again will unfreeze the tile. When a tile on the border of the tiling is frozen, the colors in the goal boundary variety in that tile are also frozen. As a result, if the user freezes a tile with a nonmatching boundary variety triangle, it will not be possible to complete the tiling successfully. (To correct this, unfreeze the tile and either change the boundary variety triangle color or change the tile in that position.) 
-      </p>
-      <p>
-	If a tiling is successfully completed, then below the tiling a <i>puzzle code</i> will be displayed.
-	A puzzle code is a string of characters that encodes the goal and tiling. If there are don't care triangles in boundary variety goal, they will be replaced in the encoded puzzle goal by the actual color in the tiling. Any symmetry that the tiling has will be added to the goal in the encoded puzzle.
-      </p>
-      <p>
-	The puzzle code may be passed as an argument to javascript code used in these pages or in a query string to with key "puzzle" to the webpage "percy.html" to create a Percy's Puzzle web page. If being used in a query string, set the check on the "URI safe" button. The "Copy to clipboard" button makes it easy to paste the puzzle code into the browser web page address or anywhere you wish to indert it.
-      </p>
-      <p>
-	Displaying the puzzle using the percy.html web page with a query string may use different colors than the ones in the tiling created in the laboratory (they will be a permutation of the colors). Also, there will be "Solve" button present which allows the user to have the solution in the puzzle code to be displayed. It is also important to note that there may be more than one solution and the application recognizes any tiling satisfying the goal as a solution.
-      </p>
-      <p>
-	Try this link created using a puzzle code generated in the lab: <a href="percy.html?puzzle=c%5E%5B%5DbSRQ86">percy.html?puzzle=c%5E%5B%5DbSRQ86</a>. This puzzle has 320 solutions!
-      </p>
-      <p>
-	If you want to go directly to the laboratory, click <a href="lab.html">here</a>.
-      </p>
-    </div>
-  </div>
 
-<script>
-  window.onload = function() {
-      squares = new MacMahonTiles();
-  }
-  
-</script>
-</body>
+    <script>
+      window.onload = function() {
+	  squares = new MacMahonTiles();
+      }
+      
+    </script>
+  </body>
+</html>
