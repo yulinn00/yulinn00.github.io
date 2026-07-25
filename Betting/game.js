@@ -93,7 +93,7 @@ function configure_game(config) {
 	: (fractional ? new RationalBettingOnRedGame() : new IntegerBettingOnRedGame());
 
     if (!listeners_configured) {
-	document.getElementById("wager").addEventListener('keydown', (event) => {
+	document.getElementById("wager").addEventListener('keyup', (event) => {
 	    if (game_state == 'betting' && event.key === 'Enter') {
 		onOK();
 	    }
