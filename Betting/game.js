@@ -9,6 +9,7 @@ var game_state;
 var card_colors;
 var selected_card_id;
 var selected_cards;
+var deck = [];
 
 const bettor_default = 'human';
 const dealer_default = 'random';
@@ -95,6 +96,7 @@ function configure_game(config) {
     if (!listeners_configured) {
 	document.getElementById("wager").addEventListener('keyup', (event) => {
 	    if (game_state == 'betting' && event.key === 'Enter') {
+		console.log('onOK in wager handler');
 		onOK();
 	    }
 	});
@@ -102,6 +104,18 @@ function configure_game(config) {
     }
 
     return true;
+}
+
+function clear_cards() {
+    for (var i = 0; i < game.num_rounds; i++) {
+	const cd = document.getElementById('card' + i);
+	if (cd == null)
+	    continue;
+	cd.removeEventListener('pointerenter', on_card_enter);
+	cd.removeEventListener('pointerleave', on_card_leave);
+	cd.removeEventListener('pointerdown', on_card_click);
+	cd.removeEventListener('touchdown', on_touch);
+    }
 }
 
 function configure_players(players_config)
@@ -158,6 +172,7 @@ async function play() {
     selected_card_id = -1;
     selected_cards = [];
 
+    clear_cards();
     const board = document.getElementById("board");
     board.innerHTML = '';
 
@@ -174,21 +189,10 @@ async function play() {
 	cd.style.top = `${card_t}px`;
 	cd.style.left = `${card_l+(max_display_cards-num_cards)*(card_l+card_w/2) + i * (2*card_l+card_w)}px`;
 
-	cd.addEventListener('pointerenter', function(e) {
-	    e.preventDefault();
-	    on_card_enter(e);
-	}, {passive: false});
-	cd.addEventListener('pointerleave', function(e) {
-	    e.preventDefault();
-	    on_card_leave(e);
-	}, {passive: false});
-	cd.addEventListener('pointerdown', function(e) {
-	    e.preventDefault();
-	    on_card_click(e);
-	}, {passive: false});
-	cd.addEventListener('touchdown', function(e) {
-	    e.preventDefault(); 
-	}, {passive: false});
+	cd.addEventListener('pointerenter', on_card_enter, {passive: false});
+	cd.addEventListener('pointerleave', on_card_leave, {passive: false});
+	cd.addEventListener('pointerdown', on_card_click, {passive: false});
+	cd.addEventListener('touchdown', on_touch, {passive: false});
 
 	await pause(200);
     }
@@ -332,7 +336,7 @@ function set_state(new_state) {
 	const delta = fractional ? game.round_history[game.num_rounds].money.subtract(game.round_history[0].money) : game.round_history[game.num_rounds].money - game.round_history[0].money;
 	const plussign = fractional ? (new Rational(0)).lt(delta) : delta > 0;
 
-	const equilibrium = game.calculate_eq(num_cards, num_red, bettor_money);
+	const equilibrium = game.calculate_eq_value(num_cards, num_red, bettor_money);
 	var wins = 0;
 	var bets = 0;
 	for (var i = 1; i <= game.num_rounds; i++) {
@@ -492,12 +496,17 @@ function onOK() {
 }
 
 function on_card_click(event) {
+    event.preventDefault();
     if (game_state != 'dealing')
 	return;
     const cd = event.target;
     selected_card_id = parseInt(cd.id.slice(4));
     select_card(cd);
     onOK();
+}
+
+function on_touch(event) {
+    event.preventDefault();
 }
 
 function select_card(cd,select = true) {
@@ -513,6 +522,7 @@ function select_card(cd,select = true) {
 }
 
 function on_card_enter(event) {
+    event.preventDefault();
     if (game_state != 'dealing')
 	return;
     const cd = event.target;
@@ -534,6 +544,7 @@ function highlight_card(cd, highlight = true) {
 }
 
 function on_card_leave(event) {
+    event.preventDefault();
     if (game_state != 'dealing')
 	return;
     const cd = event.target;
