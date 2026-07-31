@@ -680,12 +680,18 @@ class SimEngine {
 	if (this.undoButton != null) {
 	    this.undoButton.addEventListener('click', this.undoHandler);
 	    this.undoButton.disabled = true;
+	    this.noUndoKey = false;
+	} else {
+	    this.noUndoKey = true;
 	}
 
 	this.playAgainHandler = this.playAgain.bind(this);
 	this.playAgainButton = document.querySelector("#playagain");
 	if (this.playAgainButton != null)
 	    this.playAgainButton.addEventListener('click', this.playAgainHandler);
+
+	this.keydownHandler = this.onKeydown.bind(this);
+	document.addEventListener('keydown', this.keydownHandler);
 
 	this.game = game;
 	this.playerTypes = null;
@@ -741,6 +747,8 @@ class SimEngine {
 
 	if (this.playAgainButton != null)
 	    this.playAgainButton.removeEventListener('click', this.playAgainHandler);
+
+	document.removeEventListener('keydown', this.keydownHandler);
     }
     
     setGame(game) {
@@ -1164,6 +1172,14 @@ class SimEngine {
 	this.activeVertices = [null, null];
 	if (refresh)
 	    this.render();
+    }
+
+    onKeydown(event) {
+	if (event.key == 'z' && (event.ctrlKey || event.metaKey) && !this.noUndoKey) {
+	    event.preventDefault();
+	    this.undo(event);
+	    return;
+	}
     }
 
     playAgain(e) {
