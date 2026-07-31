@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Sim and TAG Laboratory</title>
+<script src="utils.js"></script>
+<script src="search.js"></script>
+
+<link rel="icon" type="image/png" sizes="32x32" href="../fun-math-icon.png">
+
+<style>
+body {
+    background: #c0c0c0
+}
+
+</style>
+</head>
+<body>
+  <div style="position: absolute; top: 6px; left: 20px"><a href="../about.html"><img src="../fun-math-club.gif"/></a></div>
+  <h1 style="margin-top: 40px; margin-bottom: 60px; text-align:center">Sim and TAG Laboratory</h1>
+  <div style="text-align: center; display: grid; grid-template-columns: 260px 160px; gap: 40px; align-items: center; max-width: 500px; margin:auto;">
+    <div style="display: grid; grid-template-columns: 180px 220px; gap: 10px; align-items: center; max-width: 400px; margin:auto;">
+      <label for = "simortag" style="justify-self: end;">Game:</label>
+      <div style="text-align: left;">
+	<label style="cursor:=pointer;"><input id="sim" type="radio" name="simortag" value="sim" checked style="cursor:=pointer;">
+	Sim</label>
+	<label style="cursor:=pointer; margin-left: 10px;"><input id="tag" type="radio" name="simortag" value="tag" style="cursor:=pointer;">
+	  TAG</label>
+      </div>
+
+      <label for = "graph" style="justify-self: end;">Graph:</label>
+      <div style="text-align: left;">
+	<label style="cursor:=pointer;"><input id="k5" type="radio" name="graph" value="k5" style="cursor:=pointer;">
+	<i>K<sub>5</sub></i></label>
+	<label style="cursor:=pointer; margin-left: 10px;"><input id="tag" type="radio" name="graph" value="k6" style="cursor:=pointer;" checked>
+	<i>K<sub>6</sub></i></label>
+      </div>
+
+      <label for="firstplayer" style="justify-self: end;">First player:</label>
+      <select id="firstplayer" name="firstplayer" style="width: 100px;" >
+	<option value="human" selected>Human</option>
+	<option value="expert">Expert bot</option>
+	<option value="intermediate">Intermediate bot</option>
+	<option value="beginner">Beginner bot</option>
+      </select>
+      <label for="secondplayer" style="justify-self: end;">Second player:</label>
+      <select id="secondplayer" name="secondplayer" style="width: 100px;">
+	<option value="human" selected>Human</option>
+	<option value="expert">Expert bot</option>
+	<option value="intermediate">Intermediate bot</option>
+	<option value="beginner">Beginner bot</option>
+      </select>
+    </div>
+  </div>
+  <div style="text-align: center; margin-top: 10px;">
+    <button id="apply" onclick="onApply()">Apply</button>
+  </div>
+  <hr style="margin-top:16px; margin-bottom:16px; text-align: center;"/>
+  <div id="gametitle"style="margin-top: 20px; margin-bottom: 16px; text-align: center;""></div>
+  <div style="display: grid; grid-template-columns: 360px; align-items:center; justify-content: center; grid-template-columns: 360px; margin: auto;">
+    <div id="boardcontainer" style="width: 360px; height: 360px; border: 2px solid black; justify-content: center; align-items: center;">
+      <canvas id="board" style="background-color: #f0f0f0; border: 0px solid black;">
+      </canvas>
+    </div>
+    <div style="display:grid; grid-template-columns: 300px 60px; border: 2px solid black; ">
+      <div id="status" style="width: 360px; height:20px; justify-content: center; align-items: center;">
+      </div>
+      <button id="undo" style="width: 60px; height: 18px; visibility: visible;">Undo</button>
+    </div>
+  </div>
+  <div style="margin-top:12px"> </div>
+  <div style="text-align: center; display: grid; grid-template-columns: 360px; gap: 20px; align-items: center; max-width: 360px; justify-items: center; margin: auto; ">
+    <label style="cursor:=pointer; text-align: left;"><input id="showwinning" type="checkbox" name="showwinning" value="yes" style="cursor:=pointer;">
+      Show winning/losing moves</label>
+    <button id="playagain" style="visibility: visible;">Play again</button>
+  </div>
+  <script src="lab.js"></script>
+</body>
+</html>
+
