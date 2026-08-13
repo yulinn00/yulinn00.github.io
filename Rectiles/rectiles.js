@@ -810,6 +810,8 @@ function initializeHandlers(cv) {
     canvas.addEventListener('pointerleave', onPointerLeave, {passive: false});
     canvas.addEventListener('touchleave', touchHandler, {passive: false});
 
+    document.addEventListener("keydown", onKeydown);
+
     inFrameOnlyCheckbox = document.getElementById("inframeonly");
     if (inFrameOnlyCheckbox != null) {
 	inFrameOnlyCheckbox.addEventListener("change", onInFrameOnlyChanged);
