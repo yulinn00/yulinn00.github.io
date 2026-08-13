@@ -1,0 +1,129 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title id='title'>Rectiles and Rectigons</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="../fun-math-icon.png">
+  </head>
+  <body style="background-color:#c0c0c0">
+    <div style="position: absolute; top: 6px; left: 20px"><a href="../about.html"><img src="../fun-math-club.gif"/></a></div>
+    <h1 style="margin-top: 40px; margin-bottom: 40px; text-align:center">Rectiles and Rectigons</h1>
+    <div style="text-align:center; font-size:20px; margin-top: 50px">
+      <div style="display:grid; grid-template-columns: 360px 600px; text-align: left; align-items: start;">
+	<div style="display:grid; grid-template-columns: 360px; text-align: left; align-items: start; margin-top: 32px;">
+	  <div>
+	    <input type="button" onclick="showRectigons()" id="showrectigons" value="Hide" style="font-weight:normal; font-size:12px;">
+	    <span style="margin-left:6px;">Rectigons</span>
+	  </div>
+	  <div id="rectigons" style="display: grid; grid-template-columns: 60px 60px 60px 60px 60px; gap: 4px 8px; align-items: start; justify-items: center;">
+	    <span >Color</span>
+	    <span >Sides</span>
+	    <span >Tiles</span>
+	    <span >Perim</span>
+	    <span >Area</span>
+	    <canvas id="swatch1" style="width: 40px; height: 20px; background-color: Magenta; visibility: hidden;"></canvas>
+	    <span id="sides1" ></span>
+	    <span id="tiles1" ></span>
+	    <span id="perim1" ></span>
+	    <span id="area1" ></span>
+	    <canvas id="swatch2" style="width: 40px; height: 20px; background-color: Magenta; visibility: hidden;"></canvas>
+	    <span id="sides2" ></span>
+	    <span id="tiles2" ></span>
+	    <span id="perim2" ></span>
+	    <span id="area2" ></span>
+	    <canvas id="swatch3" style="width: 40px; height: 20px; background-color: Magenta; visibility: hidden;"></canvas>
+	    <span id="sides3" ></span>
+	    <span id="tiles3" ></span>
+	    <span id="perim3" ></span>
+	    <span id="area3" ></span>
+	    <canvas id="swatch4" style="width: 40px; height: 20px; background-color: Magenta; visibility: hidden;"></canvas>
+	    <span id="sides4" ></span>
+	    <span id="tiles4" ></span>
+	    <span id="perim4" ></span>
+	    <span id="area4" ></span>
+	    <canvas id="swatch5" style="width: 40px; height: 20px; background-color: Magenta; visibility: hidden;"></canvas>
+	    <span id="sides5" ></span>
+	    <span id="tiles5" ></span>
+	    <span id="perim5" ></span>
+	    <span id="area5" ></span>
+	  </div>
+	  <div></div>
+	  <div>
+	    <input type="button" onclick="showPaths()" id="showpaths" value="Hide" style="font-weight:normal; font-size:12px">
+	    <span style="margin-left:6px;">Paths</span>
+	  </div>
+	  <div id="paths" style="display: grid; grid-template-columns: 60px 60px 60px 60px; gap: 4px 8px; align-items: start; justify-items: center;">
+	    <span >Color</span>
+	    <span >Edges</span>
+	    <span >Tiles</span>
+	    <span >Length</span>
+	    <canvas id="pathswatch1" style="width: 40px; height: 20px; background-color: Magenta; visibility: hidden;"></canvas>
+	    <span id="edges1" ></span>
+	    <span id="pathtiles1" ></span>
+	    <span id="length1" ></span>
+	    <canvas id="pathswatch2" style="width: 40px; height: 20px; background-color: Magenta; visibility: hidden;"></canvas>
+	    <span id="edges2" ></span>
+	    <span id="pathtiles2" ></span>
+	    <span id="length2" ></span>
+	    <canvas id="pathswatch3" style="width: 40px; height: 20px; background-color: Magenta; visibility: hidden;"></canvas>
+	    <span id="edges3" ></span>
+	    <span id="pathtiles3" ></span>
+	    <span id="length3" ></span>
+	    <canvas id="pathswatch4" style="width: 40px; height: 20px; background-color: Magenta; visibility: hidden;"></canvas>
+	    <span id="edges4" ></span>
+	    <span id="pathtiles4" ></span>
+	    <span id="length4" ></span>
+	    <canvas id="pathswatch5" style="width: 40px; height: 20px; background-color: Magenta; visibility: hidden;"></canvas>
+	    <span id="edges5" ></span>
+	    <span id="pathtiles5" ></span>
+	    <span id="length5" ></span>
+	    <canvas id="pathswatch6" style="width: 40px; height: 20px; background-color: Magenta; visibility: hidden;"></canvas>
+	    <span id="edges6" ></span>
+	    <span id="pathtiles6" ></span>
+	    <span id="length6" ></span>
+	    <canvas id="pathswatch7" style="width: 40px; height: 20px; background-color: Magenta; visibility: hidden;"></canvas>
+	    <span id="edges7" ></span>
+	    <span id="pathtiles7" ></span>
+	    <span id="length7" ></span>
+	    <canvas id="pathswatch8" style="width: 40px; height: 20px; background-color: Magenta; visibility: hidden;"></canvas>
+	    <span id="edges8" ></span>
+	    <span id="pathtiles8" ></span>
+	    <span id="length8" ></span>
+	  </div>
+	</div>
+	<div style="display:grid; grid-template-columns: 480px; text-align: left; align-items: start;">
+	  <div style="text-align: center; margin-bottom: 10px;">
+	    <input type="button" onclick="undo()" id="undo" value="Undo" style="font-weight:normal; font-size:12px">
+	  </div>
+	  <canvas id="board" width="600" height="400" style="border:5px solid #ccc;border-radius: 5px;background: black; touch-action: none;"></canvas>
+    <div style="text-align: center;">
+      <div style="display:grid; grid-template-columns: 180px 300px; gap: 10px 10px; margin: auto; align-items: center; justify-items: start; max-width: 440px;">
+	<div style="justify-self: end;">
+	  <input type="button" onclick="load()" id="load" value="Load" style="font-weight:normal; font-size:12px;"><span style="margin-left: 10px">Tiling code:</span>
+	</div>
+	<div style="text-align: start;">
+	  <span id="tilingcode"></span>
+	</div>
+	<div style="justify-self: end;">
+	  <input id="inframeonly" type="checkbox" name="inframeonly" value="yes" style="cursor:=pointer;" checked><label for="inframeonly">In frame only</label>
+	</div>
+	<div style="text-align: start;">
+	  <input type="button" onclick="onCopy()" value="Copy to clipboard" style="font-weight:normal; font-size:12px;" id="copy"/>
+	</div>
+      </div>
+	</div>
+      </div>
+    </div>
+    </div>
+    <script src="./rectigon.js"></script>
+    <script src="./rectiles.js"></script>
+    <script>
+      window.onload = function() {
+	  run("board");
+      }
+    </script>
+
+  </body>
+</html>
+
+

@@ -1,0 +1,177 @@
+<!doctype html>
+
+<html>
+  <head>
+
+    <link rel="icon" type="image/png" sizes="32x32" href="../fun-math-icon.png">
+
+    <title>Rectiles and Rectigons</title>
+
+    <style>
+      .section {
+	  margin-left: 18px;
+	  margin-right: 18px;
+	  margin-top: 18px;
+	  width: 1080px;
+      }
+      .content {
+	  display:grid; grid-template-columns: 5fr 1fr;
+	  align-items: top;
+	  gap: 0px 18px;
+      }
+      .content42 {
+	  display:grid; grid-template-columns: 4fr 2fr;
+	  align-items: top;
+	  gap: 0px 18px;
+      }
+      .content33 {
+	  display:grid; grid-template-columns: 3fr 3fr;
+	  align-items: center;
+	  gap: 0px 18px;
+      }
+      #status {
+	  position: relative;
+	  width:  360px;
+	  height: 20px;
+	  border: 0px solid #aaa;
+	  text-align: left;
+      }
+
+    </style>
+    
+  </head>
+  <body style="background-color:#c0c0c0">
+    <div style="position: absolute; top: 6px; left: 20px"><a href="../about.html"><img src="../fun-math-club.gif"/></a></div>
+    <h1 style="margin-top: 40px; margin-bottom: 40px; text-align: center">Rectiles and Rectigons</h1>
+    <h2>Rectiles</h2>
+    <div class="section">
+    <div class="content42">
+      <div>
+	<p>A <i>rectile</i> is a rectangular tile with two line segments called <i>spokes</i> drawn from the center to one of the rectangle vertices or midpoints of the sides. A rectile always has two spokes, but the two spokes may comprise a single line segment. Assuming that rotatons of a rectile count as the same rectile, there are 16 different rectiles. The figure to the right shows them tiling a 4x4 rectangular region inside a blue frame.
+	</p>
+      </div>
+      <div id="rectilesdiv" style="width: 360px; height: 360px;">
+	<canvas id="rectiles" style="border: 2px solid black;">
+	</canvas>
+      </div>
+    </div>
+  </div>
+  <h2>Rectile Paths</h2>
+  <div class="section">
+    <div class="content">
+      <div>
+	<p>
+	  We are interested in the figures formed by the spokes of an arrangements of rectiles in the 4x4 frame so that any two tiles. Any subset of the 16 tiles may be used but adjacent tiles must border each other on a full edge or at a vertex. A <i>path</i> from point <i>A</i> to point <i>B</i> is a sequence of spokes such that <i>A</i> is only on the first spoke and <i>B</i> is only on the last spoke and any point on a spoke in the path is on exactly one or two spokes. We can measure the <i>length</i> of the path in three ways: (1) by the numbrr of tiles in the path, (2) by the number of <i>edges</i>, i.e. straight segments, in the path, or (2) assuming the tiles are 3 units wide and 4 units tall, by computing the length in units, which is relatively easy since the tile's diagonal will be 5 units.
+	</p>
+	<p>
+	  In the figure to the right, the six rectiles inside the frame contain a path with "legnths"  6 tiles, 8 edges, and 25.5 units.
+	</p>
+	<p>
+	  Many questions come to mind about paths. Here are a few:
+	  <ul>
+	    <li>
+	      What is the longest path?
+	    </li>
+	    <li>
+	      Given two points <i>A</i> and <i>B</i> and what is the shortest path from point <i>A</i> to <i>B</i>?
+	    </li>
+	    <li>
+	      Given two points <i>A</i> and <i>B</i> and a number <i>n</i>, is there a path of length <i>n</i> (pick one of the three measures of length) from point <i>A</i> to <i>B</i>?
+	    </li>
+	  </ul>
+      </div>
+      <div id="pathdiv" style="width: 360px; height: 300px;">
+	<canvas id="path" style="border: 2px solid black;">
+	</canvas>
+      </div>
+    </div>
+  </div>
+  <h2>Rectigons</h2>
+  <div class="section">
+    <div class="content" style="align-items: start;">
+      <div>
+	<p>
+	  A <i>rectigon</i> is a sequence of spokes such that any endpoint of a spoke in the rectigon is on exactly two spokes, and there is a path between any two spoke endpoints. The figure formed by the rectigon is a polygon. Like with the edges of a path, the <i>sides</i> of a rectigon are the sides of the polygon, which may consist of from one to four spokea.
+	</p>
+	<p>
+	  The figure to the right shows a tiling that includes threee rectigons, one a triangle, one a quadrilateral, and one a pentagon.
+	</p>
+	<p>
+	  Some questions about rectigons to investigate include:
+	  <ul>
+	    <li>
+	      For what values of <i>n</i> do there exist rectigon with <i>n</i> sides?
+	    </li>
+	    <li>
+	      What rectigons can have a non-trivial symmetry?
+	    </li>
+	    <li>
+	      For a rectigon with <i>n</i> sides, what is the minimum and maximum area? (Note that we can measure relative area easily by counting the <i>octants</i>, right triangles whose vertices are the center of the tile and an adjacent vertex and side midpoint of the tile.)
+	    </li>
+	  </ul>
+      </div>
+      <div id="rectigondiv" style="width: 360px; height: 300px;">
+	<canvas id="rectigon" style="border: 2px solid black;">
+	</canvas>
+      </div>
+    </div>
+  </div>
+  <h2>The Laboratory</h2>
+  <div class="section">
+    <div class="content">
+      <div>
+	<p>
+	  The rectiles laboratory provides a board and a set of rectiles with which to experiment and to explore paths and rectigons. It is very simple to use: drag to move tiles and single click on a tile to rotate it 180<sup>o</sup>. The Undo button or keyboard Ctrl-Z/Command-Z undoes the last action you took. An example of the laboratory web page is shown to the right.
+	</p>
+	<p>
+	  Underneath the tiling area, the laboratory displays a code for the tiling that can be used to recreate the tiling. If the "In frame only" checkbox is checked, the code only includes the positions of the tiles inside the blue frame. To have the code include the positions of all tiles including those outside the frame, uncheck the "In frame only" checkbox.
+	</p>
+	<p>
+	  Copying the code makes it easy to save the tiling for future viewing. To load a tiling into the laboratory, click the "Load" button and enter the code. Alternatively, add the code to the laboratory URL as a query string with key "code".
+	</p>
+	<p>
+	  The laboratory screen also identifies rectigons and paths and displays them with colored edges and provides the basic information about the rectigons. The perimeter, area, and length assume that each tile is 3 units wide and 4 units tall.
+	  For the tiling above that has three rectigons, the code is CdzzzazzGJNizzLF.
+	  Click this link to the <a href="lab.html?code=CdzzzazzGJNizzLF">laboratory</a> to load that tiling into the laboratory and see how the rectigon information is displayed..
+	</p>
+	<p>
+	  For your first experiment in the lab, try to create a tiling that has four rectigons in the blue frame. (Here's the tiling code for one solution: zzhzCdPgflbaEkIJ)
+	</p>
+      </div>
+      <div style="display: grid; grid-template-columns: 360px; justify-content: center;">
+	<div style="display: grid; justify-items: center; grid-template-columns: 300px;">
+	  <input type="button" id="undo" value="Undo" style="font-weight:normal; font-size: 8px; width: 40px;">
+	  <canvas id="lab" style="border:5px solid #ccc;border-radius: 5px;background: black; margin-top: 8px; touch-action: none;"></canvas>
+	  <div style="display:grid; grid-template-columns: 120px 200px; gap: 3px 13px; margin: auto; align-items: center; justify-items: start; max-width: 360px; font-size: 9px;">
+	    <div style="justify-self: end;">
+	      <input type="button" id="load" value="Load" style="font-weight:normal; font-size: 9px;" ><span style="margin-left: 4px">Tiling code:</span>
+	    </div>
+	    <div style="text-align: start;">
+	      <span id="tilingcode"></span>
+	    </div>
+	    <div style="justify-self: end;">
+	      <input id="inframeonly" type="checkbox" name="inframeonly" value="yes" style="cursor:=pointer; font-size: 9px;" disabled checked><label for="inframeonly">In frame only</label>
+	    </div>
+	    <div style="text-align: start;">
+	      <input type="button" value="Copy to clipboard" style="font-size: 8px;" id="copy"/>
+	    </div>
+	  </div>
+	</div>
+	<div style="display: grid; place-items:center; grid-template-columns: 360px; ">
+	</div>
+      </div>
+    </div>
+    <div style="margin-bottom: 20px:">
+    </div>
+  </body>
+  <script src="./rectigon.js"></script>
+  <script src="rectiles.js"></script>
+  <script>
+    window.onload = function() {
+	run("rectiles", null, false, [45,60,1,3,1]);
+	run("path", "IzjPzLFCzzzzzzzz", false, [36,48,1,3,1]);
+	run("rectigon", "CdzzzazzGJNizzLF", false, [36,48,1,3,1]);
+	run("lab", null, false, [45,60,1,3,1]);
+    }
+  </script>
+</html>
