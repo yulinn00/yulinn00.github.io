@@ -389,6 +389,8 @@ class Canvas2d {
 	this.updatePolygons();
 	this.updatePaths();
 	drawBoard(this);
+	updateTilingCode(this);
+	moveHistory.length = 0;
     }
 
     static endpointMap = [ 'N', 'NE', 'E', 'SE', 'S', 'SW', 'W' ,'NW'];
@@ -879,8 +881,6 @@ function load() {
     if (code == null)
 	return;
     cv.fromStringCode(code);
-    drawBoard(cv);
-    updateTilingCode(cv);
 }
 
 function onInFrameOnlyChanged(event) {
