@@ -7,6 +7,7 @@ var h = 160;
 var innerSep = 1;
 var outerSep = 10
 var lineWidth = 3;
+var nodeRadius = 8;
 
 var innerCellWidth = w + innerSep;
 var innerCellHeight = h + innerSep;
@@ -38,12 +39,14 @@ var endpointCoords = [
     [-w / 2, 0],
     [-w / 2, -h / 2]];
 
-function resize(newW, newH, newInnerSep, newOutSep, newLineWidth) {
+function resize(newW, newH, newInnerSep, newOutSep, newLineWidth, newNodeRadius) {
+    const oldSizes = [w, h, innerSep, outerSep, lineWidth, nodeRadius];
     w = newW;
     h = newH;
     innerSep = newInnerSep;
     outerSep = newOutSep;
     lineWidth = newLineWidth;
+    nodeRadius = newNodeRadius;
 
     innerCellWidth = w + innerSep;
     innerCellHeight = h + innerSep;
@@ -74,6 +77,11 @@ function resize(newW, newH, newInnerSep, newOutSep, newLineWidth) {
 	[-w / 2, 0],
 	[-w / 2, -h / 2]];
 
+    return oldSizes;
+}
+
+function defaultSizes() {
+    resize(120, 160, 1, 10, 3, 8)
 }
 
 
@@ -82,6 +90,7 @@ var tileColor = "#f0f0a0";
 var boardColor = 'white'
 var frameColor = '#804040'
 var canvasColor = 'white';
+var frozenColor = 'silver'; // "#c0c0c0";
 const polygonColors = [
     'Magenta',
     'Turquoise',
@@ -134,11 +143,19 @@ class Tile {
 	this.line_color = lineColor;
 	this.r = r;
 	this.c = c;
+	this.frozen = false;
 	this.spokeLength = spokeLength[line1_at] + spokeLength[line2_at];
     }
     rotate() {
 	this.lines_at[0] = (this.lines_at[0] + 4) % 8;
 	this.lines_at[1] = (this.lines_at[1] + 4) % 8;
+    }
+    copy(tile) {
+	const clone = new Tile(...this.lines_at, this.r, this.c)
+	clone.line_color = this.lineColor;
+	clone.frozen = this.frozen;
+	clone.spokeLength = this.spoke_length;
+	return clone;
     }
 }
 
@@ -168,10 +185,23 @@ function makeTiles() {
     return tiles;
 }
 
+function drawNullTile(cv, r, c) {
+    var atx, aty;
+    [atx, aty] = centerCoords(r, c);
+    cv.ctx.fillStyle = 'Black';
+    vertices = [];
+    for (var i of [1,3,5,7]) {
+	vertices.push([atx + endpointCoords[i][0], aty + endpointCoords[i][1]]);
+    }
+    cv.ctx.strokeStyle = 'black'
+    cv.ctx.lineWidth = 1.0;
+    cv.fillPoly(...vertices);
+}
+
 function drawTile(cv, tile, at = null, angle = 0, border = 0) {
     var atx, aty;
     [atx, aty] = at === null ? centerCoords(tile.r, tile.c) : at;
-    cv.ctx.fillStyle = tileColor;
+    cv.ctx.fillStyle = tile.frozen ? 'black' : tileColor;
     vertices = [];
     for (var i of [1,3,5,7]) {
 	if (angle == 0)
@@ -183,10 +213,10 @@ function drawTile(cv, tile, at = null, angle = 0, border = 0) {
 	    vertices.push([atx + ep[0], aty + ep[1]]);
 	}
     }
-    cv.ctx.strokeStyle = 'black'
+
     cv.ctx.lineWidth = 0.5;
     cv.fillPoly(...vertices);
-    cv.ctx.strokeStyle = tile.line_color;
+    cv.ctx.strokeStyle = tile.frozen ? frozenColor : tile.line_color;
     cv.ctx.lineWidth = lineWidth;
     for (var i = 0; i < tile.lines_at.length; i++) {
 	if (angle == 0)
@@ -246,68 +276,30 @@ function pointToRowCol(p) {
     return [r,c];
 }
 	  
-function drawBoard(cv) {
-    cv.clear();
-    cv.ctx.fillStyle = frameColor;
-    cv.ctx.strokeStyle = 'black'
-    cv.ctx.lineWidth = 0.5;
-    cv.fillPoly(
-	[centerCoords(0, 0)[0] + endpointCoords[3][0], centerCoords(0,0)[1] + endpointCoords[3][1]],
-	[centerCoords(0, width + 1)[0] + endpointCoords[5][0], centerCoords(0, width + 1)[1] + endpointCoords[5][1]],
-	[centerCoords(height + 1, width + 1)[0] + endpointCoords[7][0], centerCoords(height + 1, width + 1)[1] + endpointCoords[7][1]],
-	[centerCoords(height + 1, 0)[0] + endpointCoords[1][0], centerCoords(height + 1, 0)[1] + endpointCoords[1][1]]);
-    cv.ctx.fillStyle = boardColor;
-    cv.fillPoly(
-	[centerCoords(1, 1)[0] + endpointCoords[7][0], centerCoords(1,1)[1] + endpointCoords[7][1]],
-	[centerCoords(1, width)[0] + endpointCoords[1][0], centerCoords(1, width)[1] + endpointCoords[1][1]],
-	[centerCoords(height, width)[0] + endpointCoords[3][0], centerCoords(height, width)[1] + endpointCoords[3][1]],
-	[centerCoords(height, 1)[0] + endpointCoords[5][0], centerCoords(height, 1)[1] + endpointCoords[5][1]]);
-    if (moving !== null) {
-	for (var t of cv.tiles) {
-	    if (t != moving.tile)
-		drawTile(cv, t);
-	}
-	const at = centerCoords(moving.tile.r, moving.tile.c);
-	drawTile(cv, moving.tile, [at[0] + moving.dx, at[1] + moving.dy], 0, 1);
-    }
-    else if (rotating !== null) {
-	for (var t of cv.tiles) {
-	    if (t != rotating.tile)
-		drawTile(cv, t);
-	}
-	drawTile(cv, rotating.tile, null, rotating.angle);
-    } else {
-	for (var t of cv.tiles) {
-	    drawTile(cv, t);
-	}
-    }
-    cv.colorPolygons();
-    cv.colorPaths();
-}
-
 
 
 class Canvas2d {
     static canvasList = [];
 
-    constructor(canvas, tiles, width, height, background = '#000000', scale = 1) {
+    constructor(canvas, tiles, background = '#000000', sizes = defaultSizes()) {
 	this.canvas = canvas;
 	this.setTiles(tiles)
-	this.canvas.width = width;
-	this.canvas.height = height;
+	this.sizes = sizes;
+	const oldSizes = resize(...this.sizes);
+	this.canvas.width = canvasWidth;
+	this.canvas.height = canvasHeight;
 	this.ctx = canvas.getContext('2d');
-	this.width = width;
-	this.height = height;
 	this.background = background;
-	this.scale = scale;
 	Canvas2d.canvasList.push(this);
+	this.nullTiles = [];
 	this.polygons = [];
 	this.paths = [];
+	resize(...oldSizes);
     }
 
     clear() {
 	this.ctx.fillStyle = this.background;
-	this.ctx.fillRect(0, 0, this.width / this.scale, this.height / this.scale);
+	this.ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     }
 
     remove() {
@@ -332,8 +324,6 @@ class Canvas2d {
     setTiles(tiles) {
 	this.tiles = tiles;
 	tiles.forEach((t) => {t.cv = this;});
-	this.updatePolygons();
-	this.updatePaths();
     }
 
     tileAt(r, c) {
@@ -349,11 +339,16 @@ class Canvas2d {
 	var i = 0;
 	var unused_r, unused_c;
 
+	this.null_tiles = [];
 	tiles.forEach((t) => { t.r = -1; t.c = -1});
 	const extended = code.length == width * height ? false : true;
 	for (var r = extended ? 0 : 1; r < (extended ? 2 : 1) + height; r++) {
 	    for (var c = extended ? 0 : 1; c < (extended ? 2 : 1) + width; c++) {
 		if (code.charAt(i) == 'z') {
+		    i += 1;
+		    continue;
+		} else if (code.charAt(i) == 'Z') {
+		    this.nullTiles.push([r, c]);
 		    i += 1;
 		    continue;
 		}
@@ -385,12 +380,49 @@ class Canvas2d {
 	    const t = tiles.filter((t) => t.r == -1 || t.c == -1)[0];
 	    t.r = emptyRow;
 	    t.c = emptyCol;
+	    if (Math.random() < 0.5) t.rotate();
 	}
 	this.updatePolygons();
 	this.updatePaths();
-	drawBoard(this);
+	this.drawBoard();
 	updateTilingCode(this);
 	moveHistory.length = 0;
+    }
+
+    drawBoard() {
+	const oldSizes = resize(...this.sizes);
+	this.clear();
+	this.ctx.fillStyle = frameColor;
+	this.ctx.strokeStyle = 'black'
+	this.ctx.lineWidth = 0.5;
+	this.fillPoly(
+	    [centerCoords(0, 0)[0] + endpointCoords[3][0], centerCoords(0,0)[1] + endpointCoords[3][1]],
+	    [centerCoords(0, width + 1)[0] + endpointCoords[5][0], centerCoords(0, width + 1)[1] + endpointCoords[5][1]],
+	    [centerCoords(height + 1, width + 1)[0] + endpointCoords[7][0], centerCoords(height + 1, width + 1)[1] + endpointCoords[7][1]],
+	    [centerCoords(height + 1, 0)[0] + endpointCoords[1][0], centerCoords(height + 1, 0)[1] + endpointCoords[1][1]]);
+	this.ctx.fillStyle = boardColor;
+	this.fillPoly(
+	    [centerCoords(1, 1)[0] + endpointCoords[7][0], centerCoords(1,1)[1] + endpointCoords[7][1]],
+	    [centerCoords(1, width)[0] + endpointCoords[1][0], centerCoords(1, width)[1] + endpointCoords[1][1]],
+	    [centerCoords(height, width)[0] + endpointCoords[3][0], centerCoords(height, width)[1] + endpointCoords[3][1]],
+	    [centerCoords(height, 1)[0] + endpointCoords[5][0], centerCoords(height, 1)[1] + endpointCoords[5][1]]);
+	for (var [r,c] of this.nullTiles) {
+	    drawNullTile(this, r,c);
+	}
+	for (var t of this.tiles) {
+	    if ((moving == null || t != moving.tile) && (rotating == null || t != rotating.tile) && t != null)
+		drawTile(this, t);
+	}
+	this.colorPolygons();
+	this.colorPaths();
+	if (moving !== null) {
+	    const at = centerCoords(moving.tile.r, moving.tile.c);
+	    drawTile(this, moving.tile, [at[0] + moving.dx, at[1] + moving.dy], 0, 1);
+	}
+	else if (rotating !== null) {
+	    drawTile(this, rotating.tile, null, rotating.angle);
+	}
+	resize(...oldSizes);
     }
 
     static endpointMap = [ 'N', 'NE', 'E', 'SE', 'S', 'SW', 'W' ,'NW'];
@@ -494,6 +526,30 @@ class Canvas2d {
     }
 
 
+    nextCpAtCp(cp, includeCp = false) {
+	const adjacentList = this.boardCoordsAtCp(...cp);
+	var nextTiles = [];
+	for (var coords of adjacentList) {
+	    const t = this.tileAt(coords[0], coords[1]);
+	    if (t == null)
+		continue;
+	    if (!includeCp && t.r == cp[0] && t.c == cp[1])
+		continue;
+	    if (t.lines_at.some((s) => this.areAdjacentConnectionPoints(t.r, t.c, s, ...cp))) {
+		nextTiles.push(t);
+	    }
+	}
+	const nextCpList = [];
+	for (var tile of nextTiles) {
+	    const spoke = this.isAdjacentAt(cp[0], cp[1], cp[2], tile.r, tile.c);
+	    var nextSpoke = spoke == tile.lines_at[0] ? tile.lines_at[1] : tile.lines_at[0];
+	    const nextCp = [tile.r, tile.c, nextSpoke];
+	    nextCpList.push(nextCp);
+	}
+	return nextCpList;
+    }
+
+
     graphToCanvas(coords) {
 	var c = boardLeft + coords[0] * innerCellWidth;
 	var r = boardTop + (height - coords[1]) * innerCellHeight;
@@ -574,7 +630,7 @@ class Canvas2d {
 	return edges;
     }
 
-    findPath(startCp) {
+    findPath(startCp, min_length = 2) {
 	if (this.paths.some((p) => this.areAdjacentConnectionPoints(p.cp[0], p.cp[1], p.cp[2], ...startCp)))
 	    return null;
 	const pathTiles = [];
@@ -588,9 +644,9 @@ class Canvas2d {
 	    lastCp = nextCp;
 	}
 	if (lastCp != null && this.paths.some((p) => this.areAdjacentConnectionPoints(p.cp[0], p.cp[1], p.cp[2], ...lastCp)))
-	    return null;
+	    return [];
 	
-	return  pathTiles.length > 1 ? pathTiles : null;
+	return  pathTiles.length >= min_length ? pathTiles : [];
     }
 
     updatePaths() {
@@ -602,7 +658,7 @@ class Canvas2d {
 		if (r == 1) {
 		    for (var s of [7, 0, 1]) {
 			path = this.findPath([r, c, s]);
-			if (path != null) {
+			if (path.length != 0) {
 			    this.paths.push({cp: [r, c, s], path: path, color: pathColors[n]});
 			    n += 1;
 			}
@@ -611,14 +667,14 @@ class Canvas2d {
 		if (c == 1) {
 		    if (r != 1) {
 			path = this.findPath([r, c, 7]);
-			if (path != null) {
+			if (path.length != 0) {
 			    this.paths.push({cp: [r, c, 7], path: path, color: pathColors[n]});
 			    n += 1;
 			}
 		    }
 		    for (var s of [6, 5]) {
 			path = this.findPath([r, c, s]);
-			if (path != null) {
+			if (path.length != 0) {
 			    this.paths.push({cp: [r, c, s], path: path, color: pathColors[n]});
 			    n += 1;
 			}
@@ -626,7 +682,7 @@ class Canvas2d {
 		}
 		for (var s of [2, 3, 4]) {
 		    path = this.findPath([r, c, s]);
-		    if (path != null) {
+		    if (path.length != 0) {
 			this.paths.push({cp: [r, c, s], path: path, color: pathColors[n]});
 			n += 1;
 		    }
@@ -708,6 +764,13 @@ class Canvas2d {
 	this.path = longestPath(tiles);
     }
 
+    update() {
+	updateTilingCode(this);
+	this.updatePolygons();
+	this.updatePaths();
+    }
+    
+
     lineRel(x1, y1, dx, dy) {
 	this.line(x1, y1, x1 + dx, y1 + dy);
     }
@@ -717,25 +780,25 @@ class Canvas2d {
 	ctx.beginPath();
 	ctx.moveTo(x1, y1);
 	ctx.lineTo(x2, y2);
-	ctx.closePath();
+	//ctx.closePath();
 	ctx.stroke();
     }
 
     arc(x, y, r, from = 0, to = 2 * Math.PI, fill = false) {
 	const ctx = this.ctx;
 	ctx.beginPath();
-	ctx.arc(x, y, r, from, to, false);
+	ctx.arc(x, y, r, from, to);
 	ctx.closePath();
 	if (fill)
 	    ctx.fill();
-	ctx.stroke();
+	else
+	    ctx.stroke();
     }
 
     posFromEvent(e) {
 	const rect = this.canvas.getBoundingClientRect();
 	const elementPageX = rect.left + window.scrollX;
 	const elementPageY = rect.top + window.scrollY;
-	
 	
 	return { x: e.pageX - elementPageX, y: e.pageY - elementPageY };
     }
@@ -766,9 +829,13 @@ class Canvas2d {
 	[r,c] = pointToRowCol(pos);
 	if (r < 0 || c < 0)
 	    return [null, null];
+	for (var [row,col] of this.nullTiles) {
+	    if (r == row && c == col)
+		return [null, null];
+	}
 	for (var t of this.tiles) {
 	    if (t.r == r && t.c == c) {
-		return [t, [r,c]];
+		return t.frozen ? [null, null] : [t, [r,c]];
 	    }
 	}
 	return [null, [r, c]];
@@ -820,17 +887,11 @@ function initializeHandlers(cv) {
     }
 }
 
-function update(cv) {
-    updateTilingCode(cv);
-    cv.updatePolygons();
-    cv.updatePaths();
-}
-    
 function rotateTile(tile, no_hist = false) {
     tile.rotate();
     if (!no_hist)
 	moveHistory.push({type: 'rot', tile: tile});
-    update(tile.cv);
+    tile.cv.update();
 }
 
 function swapTile( tile, swapTile, no_hist = false) {
@@ -843,7 +904,7 @@ function swapTile( tile, swapTile, no_hist = false) {
 
     if (!no_hist)
 	moveHistory.push({type: 'swap', tile: tile, swap: swapTile});
-    update(tile.cv);
+    tile.cv.update();
 }
 
 function moveTile( tile, rc, no_hist = false) {
@@ -851,7 +912,7 @@ function moveTile( tile, rc, no_hist = false) {
 	moveHistory.push({type: 'move', tile: tile, from: [tile.r, tile.c]});
     tile.r = rc[0];
     tile.c = rc[1];
-    update(tile.cv);
+    tile.cv.update();
 }
 
 function undo() {
@@ -868,8 +929,12 @@ function undo() {
     case 'rot':
 	rotateTile(move.tile, true);
 	break;
+    case 'noundo':
+    case 'hint':
+	moveHistory.push(move);
+	return;
     }
-    drawBoard(move.tile.cv);
+    move.tile.cv.drawBoard();
 }
 
 function load() {
@@ -943,7 +1008,7 @@ function onPointerUp(event) {
 	cv.canvas.style.cursor = "pointer";
     }
     moving = null;
-    drawBoard(cv);
+    cv.drawBoard();
 }
 
 function onPointerMove(event) {
@@ -963,7 +1028,7 @@ function onPointerMove(event) {
     moving.dy = pos.y - moving.y;
     moving.moved = moving.dx != 0 || moving.dy != 0;
     if (moving.moved)
-	drawBoard(cv);
+	cv.drawBoard();
 }
 
 function onPointerLeave(event) {
@@ -974,7 +1039,7 @@ function onPointerLeave(event) {
     }
     cv.canvas.style.cursor = "default";
     moving = null;
-    drawBoard(cv);
+    cv.drawBoard();
 }
 
 function touchHandler(e) {
@@ -982,9 +1047,12 @@ function touchHandler(e) {
 }
 
 function onKeydown(event) {
-    if (event.key == 'z' && (event.ctrlKey || event.metaKey) && document.getElementById("undo") !== null) {
-	event.preventDefault();
-	undo();
+    if (event.key == 'z' && (event.ctrlKey || event.metaKey)) {
+	undoButton =  document.getElementById("undo");
+	if (undoButton !== null && !undoButton.disabled) {
+	    event.preventDefault();
+	    undo();
+	}
 	return;
     }
 }
@@ -996,13 +1064,13 @@ function onInFrameOnlyChanged(event) {
 function showRectigons() {
     highlightRectigons = !highlightRectigons;
     document.getElementById("showrectigons").value = highlightRectigons ? "Hide" : "Show";
-    drawBoard(cv);
+    cv.drawBoard();
 }
 
 function showPaths() {
     highlightPaths = !highlightPaths;
     document.getElementById("showpaths").value = highlightPaths ? "Hide" : "Show";
-    drawBoard(cv);
+    cv.drawBoard();
 }
 
 function animateRotate() {
@@ -1016,7 +1084,7 @@ function animateRotate() {
 	clearInterval(rotating.timer);
         rotating = null;
     }
-    drawBoard(cv);
+    cv.drawBoard();
 }
 
 
@@ -1038,7 +1106,11 @@ function toStringCode(tiles, inFrameOnly = true) {
 		    break;
 		}
 		if ((endpoints[i][0] + 4) % 8 == t.lines_at[0] && (endpoints[i][1] + 4) % 8 == t.lines_at[1]) {
-		    code += String.fromCharCode(0x61 + i);
+		    if ((t.lines_at[1] + 4) % 8 == t.lines_at[0]) {
+			code += String.fromCharCode(0x41 + i);
+		    } else {
+			code += String.fromCharCode(0x61 + i);
+		    }
 		    break;
 		}
 	    }
@@ -1056,7 +1128,7 @@ function isValidStringCode(code) {
 	tiles[c] = 0;
     }
     for (var c of code) {
-	if (c == 'z')
+	if (c == 'z' || c == 'Z')
 	    continue;
 	const lower = c.toLowerCase();
 	if (!letters.includes(lower))
@@ -1068,11 +1140,10 @@ function isValidStringCode(code) {
     return true;
 }
 
-function run(canvasId, tilingCode = null, includeHandlers = true, sizes = [75, 100, 1, 6, 3], colors = ['black', 'lightyellow', 'white', 'blue', 'silver']) {
-    resize(...sizes);
+function run(canvasId, tilingCode = null, includeHandlers = true, sizes = [75, 100, 1, 6, 3, 10], colors = ['black', 'lightyellow', 'white', 'blue', 'silver']) {
     recolor(...colors);
 
-    cv = new Canvas2d(document.getElementById(canvasId), makeTiles(), canvasWidth, canvasHeight, canvasColor);
+    cv = new Canvas2d(document.getElementById(canvasId), makeTiles(), canvasColor, sizes);
     
     if (tilingCode === null)
 	tilingCode = tilingFromQueryString();
@@ -1085,7 +1156,7 @@ function run(canvasId, tilingCode = null, includeHandlers = true, sizes = [75, 1
     } else {
 	cv.updatePolygons();
 	cv.updatePaths();
-	drawBoard(cv);
+	cv.drawBoard();
     }
     updateTilingCode(cv);
     if (includeHandlers) {

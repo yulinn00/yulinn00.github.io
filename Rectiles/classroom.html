@@ -161,17 +161,44 @@
 	</div>
       </div>
     </div>
-    <div style="margin-bottom: 20px:">
-    </div>
+  </div>
+  <h2>recTangle Puzzles</h2>
+  <div class="section">
+    <div class="content42">
+      <div>
+	<p>
+	  A <i>recTangle</i> puzzle shows the start and end points of a rectile path (green dots in the figure to the right). The puzzle is to construct the path using rectiles. To make the solution a unique path, the puzzle also specifies some tiles in the path (black tiles in the puzzle shown to the right). The black tiles are already pre-placed and may not be moved. The start position, your progress on the making the path, and the number of moves you have made is shown in the diagram to the left of the main puzzle board. As you add or move tiles in the blue rectangle, the longest paths starting at the start and end points are shown. When you successfully solve the puzzle, those two paths will become one highlighted path of black tiles. There is only one solution.
+	</p>
+	<p>
+	  If you get stuck uou can get a hint by clicking the "Hint" button. The will remove from the game the rectiles that are <i>not</i> used in the solving the puzzle. You can receive at most one hint per puzzle.
+	<p>
+	  Try a <a href="tangle.html">sample</a> recTangle puzzle, and visit the <a href="quad.html">quad</a> to try the daily puzzle.
+	</p>
+      </div>
+      <div style="display:grid; grid-template-columns: 120px 240px; text-align: left; align-items: start;">
+	<div style="display:grid; grid-template-columns: 120px; justify-items: center;">
+	  <canvas id="puzzle" width="600" height="400" style="border:5px solid #ccc;border-radius: 5px;background: black; touch-action: none; margin-top: 30px;"></canvas>
+	  <div id="moves" style="font-weight:normal; font-size: 8px; "></div>
+	</div>
+	<div style="display:grid; grid-template-columns: 240px; text-align: left; align-items: start;">
+	  <div style="text-align: left; margin-bottom: 3px; margin-left: 60px;">
+	    <input type="button" id="undo" value="Undo" style="font-weight:normal; font-size: 8px; ">
+	    <span style="margin-left: 1px;"><input type="button" onclick="cv.onHint()" id="hint" value="Hint" style="font-weight:normal; font-size:8px"/></span>
+	  </div>
+	  <canvas id="board" width="600" height="400" style="border:5px solid #ccc;border-radius: 5px;background: black; touch-action: none;"></canvas>
+	</div>
+      </div>
   </body>
   <script src="./rectigon.js"></script>
   <script src="rectiles.js"></script>
+  <script src="tangle.js"></script>
   <script>
     window.onload = function() {
 	run("rectiles", null, false, [45,60,1,3,1]);
 	run("path", "IzjPzLFCzzzzzzzz", false, [36,48,1,3,1]);
 	run("rectigon", "CdzzzazzGJNizzLF", false, [36,48,1,3,1]);
 	run("lab", null, false, [45,60,1,3,1]);
+	showPath("board", "GPNijzhFMCOeALkB.2000");
     }
   </script>
 </html>
