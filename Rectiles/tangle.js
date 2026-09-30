@@ -343,14 +343,14 @@ function isValidPathStringCode(code) {
 
 function runDates(puzzleList = null) {
     this.puzzleList = puzzleList;
-    var tilingCode = ''
+    var tilingCode = '';
     var daily = false;
     const date = new Date();
     const today = String(date.getFullYear()) + String(date.getMonth()+1).padStart(2, '0') + String(date.getDate()).padStart(2, '0');
     if (typeof(this.puzzleList[0]) == 'string') {
 	tilingCode = this.puzzleList.shift();
 	daily = false;
-    } else {
+    } else if (Array.isArray(this.puzzleList)) {
 	for (var p of this.puzzleList) {
 	    if (p[0] == today) {
 		tilingCode = p[1];
@@ -358,10 +358,19 @@ function runDates(puzzleList = null) {
 	    }
 	}
 	daily = true;
+    } else {
+	tilingCode = null;
     }
 
-    if (tilingCode == null || tilingCode == '' || !isValidPathStringCode(tilingCode)) {
-	window.alert(tilingCode == null ? 'No new puzzle list' : 'Bad tiling code')
+    if (tilingCode == null || tilingCode == '') {
+	window.alert(tilingCode == null ? 'No new puzzle list' : (daily ? 'No puzzle today' : 'No puzzlr code'));
+	document.getElementById("hint").disabled = true;
+	document.getElementById("undo").disabled = true;
+	return;
+	//tilingCode = "GPNijzhFMCOeALkB.2000";
+    }
+    else if  (!isValidPathStringCode(tilingCode)) {
+	window.alert('Bad tiling code');
 	tilingCode = "GPNijzhFMCOeALkB.2000";
     }
     else
