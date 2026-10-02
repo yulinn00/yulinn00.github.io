@@ -658,7 +658,7 @@ class Canvas2d {
 		if (r == 1) {
 		    for (var s of [7, 0, 1]) {
 			path = this.findPath([r, c, s]);
-			if (path.length != 0) {
+			if (path != null && path.length != 0) {
 			    this.paths.push({cp: [r, c, s], path: path, color: pathColors[n]});
 			    n += 1;
 			}
@@ -667,14 +667,14 @@ class Canvas2d {
 		if (c == 1) {
 		    if (r != 1) {
 			path = this.findPath([r, c, 7]);
-			if (path.length != 0) {
+			if (path != null && path.length != 0) {
 			    this.paths.push({cp: [r, c, 7], path: path, color: pathColors[n]});
 			    n += 1;
 			}
 		    }
 		    for (var s of [6, 5]) {
 			path = this.findPath([r, c, s]);
-			if (path.length != 0) {
+			if (path != null && path.length != 0) {
 			    this.paths.push({cp: [r, c, s], path: path, color: pathColors[n]});
 			    n += 1;
 			}
@@ -682,7 +682,7 @@ class Canvas2d {
 		}
 		for (var s of [2, 3, 4]) {
 		    path = this.findPath([r, c, s]);
-		    if (path.length != 0) {
+		    if (path != null && path.length != 0) {
 			this.paths.push({cp: [r, c, s], path: path, color: pathColors[n]});
 			n += 1;
 		    }
