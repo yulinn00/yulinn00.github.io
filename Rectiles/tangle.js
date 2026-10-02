@@ -246,6 +246,7 @@ class PuzzleCanvas extends Canvas2d {
 	this.tiles = this.tiles_in_path;
 	moveHistory.push({type: 'hint'});
 	this.hintUsed = true;
+	this.updatePaths();
 	this.drawBoard();
 	document.getElementById("hint").disabled = true;
     }
@@ -363,17 +364,20 @@ function runDates(puzzleList = null) {
     }
 
     if (tilingCode == null || tilingCode == '') {
-	window.alert(tilingCode == null ? 'No new puzzle list' : (daily ? 'No puzzle today' : 'No puzzlr code'));
+	window.alert(tilingCode == null ? 'No new puzzle list' : (daily ? 'No puzzle today' : 'No puzzle code'));
 	document.getElementById("hint").disabled = true;
 	document.getElementById("undo").disabled = true;
 	return;
 	//tilingCode = "GPNijzhFMCOeALkB.2000";
     }
-    else if  (!isValidPathStringCode(tilingCode)) {
+    if  (!isValidPathStringCode(tilingCode)) {
 	window.alert('Bad tiling code');
-	tilingCode = "GPNijzhFMCOeALkB.2000";
+	document.getElementById("hint").disabled = true;
+	document.getElementById("undo").disabled = true;
+	return;
+	//tilingCode = "GPNijzhFMCOeALkB.2000";
     }
-    else
+
     if (daily) {
 	document.getElementById("title-heading").innerHTML = "Tangle of the Day<br\>"+
 	    today.substring(4,6)+"/"+today.substring(6,8)+"/"+today.substring(0,4);
