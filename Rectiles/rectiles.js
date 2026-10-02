@@ -1142,6 +1142,7 @@ function isValidStringCode(code) {
 
 function run(canvasId, tilingCode = null, includeHandlers = true, sizes = [75, 100, 1, 6, 3, 10], colors = ['black', 'lightyellow', 'white', 'blue', 'silver']) {
     recolor(...colors);
+    resize(...sizes);
 
     cv = new Canvas2d(document.getElementById(canvasId), makeTiles(), canvasColor, sizes);
     
