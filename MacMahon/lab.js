@@ -186,8 +186,6 @@ class Lab extends MacMahonGame {
     }
 
     getPuzzleCode() {
-	if (!this.goalMet)
-	    return '';
 	return this.URIsafe ? encodeURIComponent(this.toStringCode()) : this.toStringCode();
     }
 
@@ -242,7 +240,6 @@ class Lab extends MacMahonGame {
 	renderContact("contact-goal", this.contact, this.colors, 0, this.twoColorTiles);
 
 	document.getElementById("board-value").innerHTML = this.getPuzzleCode();
-	document.getElementById("copy").disabled = !this.goalMet;
     }
     
     onTilesChanged(event) {
@@ -393,4 +390,29 @@ class Lab extends MacMahonGame {
 	this.contactPos = [-1,-1];
     }
 
+    onLoad() {
+	var code = prompt("Enter position code");
+	if (code == null or code == '')
+	    return;
+
+	goal = new GoalConfiguration(code);
+
+	this.setType = goal.tileSet;
+	const tilesSelector = document.querySelector('#tiles');
+	tilesSelector.value = this.setType;
+	super.configureTiles(this.setType);
+	this.tiles = goal.tiles;
+
+	const dimsSelector = document.querySelector('#dim');
+	dimsSelector.value = goal.dims;
+	const dims = goal.dims.split('x');
+	this.width = parseInt(dims[1]);
+	this.height = parseInt(dims[0]);
+
+	this.resetHistory();
+	this.configureGoal();
+	this.configureBoards();
+	this.configureContact();
+	this.update();
+    }
 }

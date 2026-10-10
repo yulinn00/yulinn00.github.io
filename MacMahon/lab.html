@@ -69,14 +69,19 @@
     <div style="display: flex; align-items: center; justify-content: center; margin-top: 20px;">
       <table>
 	<tr>
+	  <td style="text-align: right;">
+	    <input type="button" id="load" value="Load puzzle code" onclick="squares.onLoad()" style="font-weight:normal; font-size:12px;" />
+	    </td>
 	  <td style="text-align: left;">
-	    Puzzle code: <span id="board-value" style="margin-left:5px;"></span>
+	    <span id="board-value" style="margin-left:5px;"></span>
 	  </td>
 	  <td>
-	    <input type="button" onclick="squares.onCopy()" value="Copy to clipboard" style="font-weight:normal; font-size:12px; margin-left: 20px;" id="copy"/>
+	    <input type="button" onclick="squares.onCopy()" value="Copy to clipboard" style="font-weight:normal; font-size:12px; margin-left: 10px;" id="copy"/>
 	  </td>
 	</tr>
 	<tr>
+	  <td>
+	  </td>
 	  <td style="text-align: left;">
 	    <label>
 	      <input type="checkbox" id="URI-safe" onclick="squares.onURIsafe()" style="font-weight:normal; font-size:12px;" />
