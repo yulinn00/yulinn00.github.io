@@ -392,7 +392,7 @@ class Lab extends MacMahonGame {
 
     onLoad() {
 	var code = prompt("Enter position code");
-	if (code == null or code == '')
+	if (code == null || code == '')
 	    return;
 
 	goal = new GoalConfiguration(code);
