@@ -36,14 +36,15 @@ class PuzzleCanvas extends Canvas2d {
     }
     
 
+
     fromStringCode(code) {
 	const m = code.match(/(?<code>.[^.]*)[.](?<frozen>[0123456789abcdefABCDEF]*)/);
 
 	const frozen = parseInt(m.groups.frozen,16);
 
-	super.fromStringCode(m.groups.code);
+	super.fromStringCode(code);
 	this.solutionCode = toStringCode(this.tiles); // use toStringCode to normalize code
-	
+
 	for (var tile of this.tiles) {
 	    if (tile == null || tile.r < 1 || tile.r > height || tile.c < 1 || tile.c > width) continue;
 	    var cps = [];
@@ -79,19 +80,17 @@ class PuzzleCanvas extends Canvas2d {
 	this.puzzleCode = '';
 	var f = 1;
 	for (var ch of this.solutionCode) {
+	    if (ch == '.')
+		break;
 	    this.maxScore += ch == 'z' ? 0 : (frozen & f) ? 4 : 1;
-	    //this.puzzleCode += ch == 'z' ? 'Z' : (frozen & f) ? ch : 'z';
 	    this.puzzleCode += (ch == 'z' || ch == 'Z') ? ch : ((frozen & f) ? ch : 'z');
 	    f <<= 1;
 	}
-	super.fromStringCode(this.puzzleCode);
-	
-	this.tiles.forEach((t) => {
-	    if (1 <= t.r && t.r <= height && 1 <= t.c && t.c <= width) t.frozen = true;
-	});
+	super.fromStringCode(this.puzzleCode + '.' + m.groups.frozen);
 	this.updatePaths();
 	this.drawBoard();
     }
+
 
     drawBoard() {
 	const showMoves = true;
@@ -99,7 +98,6 @@ class PuzzleCanvas extends Canvas2d {
 
 	const moves_after_hint = this.hintUsed ? this.calculateMoves(true) : 0;
 	document.getElementById("moves").innerHTML = showMoves ? (`Moves: ${this.solved ? this.movesToSolve : this.calculateMoves()}` + (moves_after_hint > 0 ? ` (${moves_after_hint} after hint)` : '')) : '';
-	//document.getElementById("currentscore").innerHTML = this.solved ? '' : `Current Score: ${this.currentScore}` + (showMoves ? `,  Moves: ${moveHistory.length}` : '');
 	if (pathCv != null) pathCv.drawBoard();
     }
 
@@ -334,12 +332,6 @@ class PathCanvas extends PuzzleCanvas {
     }
 }
 
-
-function isValidPathStringCode(code) {
-    const m = code.match(/(?<code>.[^.]*)[.](?<frozen>[0123456789abcdefABCDEF]*)/);
-
-    return m != null && isValidStringCode(m.groups.code) && m.groups.frozen.length == 4;
-}
 
 
 function runDates(puzzleList = null) {

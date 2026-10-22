@@ -121,6 +121,7 @@ function recolor(newLineColor, newTileColor, newBoardColor, newFrameColor, newCa
 var cv = null;
 var moving = null;
 var rotating = null;
+var addRemoveFrozen = false;
 const moveHistory = [];
 var onInFrameOnlyChangedHandler = null;
 var highlightRectigons =true;
@@ -334,7 +335,12 @@ class Canvas2d {
 	return null;
     }
     
-    fromStringCode(code) {
+    fromStringCode(code_frozen) {
+	const m = code_frozen.match(/(?<code>.[^.]*)[.](?<frozen>[0123456789abcdefABCDEF]*)/);
+
+	const code = m.groups.code;
+	const frozen = parseInt(m.groups.frozen,16);
+	
 	const tiles = this.tiles;
 	var i = 0;
 	var unused_r, unused_c;
@@ -382,6 +388,14 @@ class Canvas2d {
 	    t.c = emptyCol;
 	    if (Math.random() < 0.5) t.rotate();
 	}
+
+	for (var t of tiles) {
+	    if (1 <= t.r && t.r <= height && 1 <= t.c && t.c <= width)
+		t.frozen = (frozen & (1 << ((t.r - 1) * 4 + t.c - 1))) != 0;
+	    else
+		t.frozen = false;
+	}
+
 	this.updatePolygons();
 	this.updatePaths();
 	this.drawBoard();
@@ -835,7 +849,7 @@ class Canvas2d {
 	}
 	for (var t of this.tiles) {
 	    if (t.r == r && t.c == c) {
-		return t.frozen ? [null, null] : [t, [r,c]];
+		return [t, [r,c]];
 	    }
 	}
 	return [null, [r, c]];
@@ -940,13 +954,19 @@ function undo() {
 function load() {
     var code = prompt("Enter code");
 
-    while (code != null && !isValidStringCode(code)) {
+    while (code != null && !isValidPathStringCode(code)) {
 	code = prompt(`${code} is not valid. Enter a valid code`);
     }
     if (code == null)
 	return;
     cv.fromStringCode(code);
 }
+
+function onToggleFreeze(event) {
+    addRemoveFrozen = !this.addRemoveFrozen;
+    updateToggleFreeze();
+}
+
 
 function onInFrameOnlyChanged(event) {
     updateTilingCode(cv);
@@ -963,12 +983,42 @@ function updateTilingCode(cv) {
 	text.innerHTML = calculateTilingCode(cv);
 }
 
+function updateToggleFreeze()
+{
+    const t = document.getElementById("toggle-freeze");
+    if (this.addRemoveFrozen) {
+	t.style.backgroundColor = "yellow";
+	t.style.borderRadius = "6px";
+	t.style.border = "1px solid #ccc";
+    } else {
+	t.style.backgroundColor = "white";
+	t.style.borderRadius = "6px";
+	t.style.border = "1px solid #ccc";
+    }
+}
+
 function onPointerDown(event) {
     event.preventDefault();
     const cv = Canvas2d.fromCanvas(event.target);
     var pos = cv.posFromEvent(event);
     const [tile, rc] = cv.inTile(pos);
     if (tile == null || rc == null || rotating !== null) {
+	cv.canvas.style.cursor = "default";
+        return;
+    }
+    if (addRemoveFrozen) {
+	if (rc[0] == 0 || rc[0] == 1 + height || rc[1] == 0 || rc[1] == 1 + width) {
+	    cv.canvas.style.cursor = "default";
+            return;
+	}	    
+	tile.frozen = !tile.frozen;
+	tile.cv.drawBoard();
+	updateTilingCode(tile.cv);
+	addRemoveFrozen = false;
+	updateToggleFreeze();
+	return;
+    }
+    if (tile.frozen) {
 	cv.canvas.style.cursor = "default";
         return;
     }
@@ -1000,10 +1050,10 @@ function onPointerUp(event) {
 	    moving = null;
 	    return;
         }
-    } else if ( tile !== null) {
+    } else if ( tile !== null && !tile.frozen) {
 	swapTile(moving.tile, tile);
 	cv.canvas.style.cursor = "pointer";
-    } else if (moving.tile != null) {
+    } else if (moving.tile != null && !(tile !== null && tile.frozen)) {
 	moveTile(moving.tile, rc);
 	cv.canvas.style.cursor = "pointer";
     }
@@ -1016,10 +1066,17 @@ function onPointerMove(event) {
     const cv = Canvas2d.fromCanvas(event.target);
     const pos = cv.posFromEvent(event);
     const [tile, rc] = cv.inTile(pos);
-    if (tile == null || rc == null) 
+    if (tile == null || (!addRemoveFrozen && tile.frozen) || rc == null) 
 	cv.canvas.style.cursor = "default";
-    else
+    else {
+	if (addRemoveFrozen) {
+	    if (rc[0] == 0 || rc[0] == 1 + height || rc[1] == 0 || rc[1] == 1 + width) {
+		cv.canvas.style.cursor = "default";
+		return;
+	    }
+	}
 	cv.canvas.style.cursor = "pointer";
+    }
     if (moving === null) {
 	return;
     }
@@ -1092,14 +1149,22 @@ function toStringCode(tiles, inFrameOnly = true) {
     code = '';
     if (!inFrameOnly)
 	inFrameOnly = tiles.every((t) => 0 < t.r && t.r <= height && 0 < t.c && t.c <= width);
+    f = 0;
+    b = 1;
     for (var r = inFrameOnly ? 1 : 0; r < (inFrameOnly ? 1 : 2) + height; r++) {
 	for (var c = inFrameOnly ? 1 : 0; c < (inFrameOnly ? 1 : 2) + width; c++) {
 	    var t = tiles.filter((t) => t.r == r && t.c == c);
 	    if (t.length == 0) {
 		code += 'z';
+		if (0 < r && r < 1 + height && 0 < c && c < 1 + width)
+		    b <<= 1;
 		continue;
 	    }
 	    t = t[0]
+	    if (0 < r && r < 1 + height && 0 < c && c < 1 + width) {
+		f |= (t.frozen ? b : 0);
+		b <<= 1;
+	    }
 	    for (var i = 0; i < endpoints.length; i++) {
 		if (endpoints[i][0] == t.lines_at[0] && endpoints[i][1] == t.lines_at[1]) {
 		    code += String.fromCharCode(0x41 + i);
@@ -1116,6 +1181,7 @@ function toStringCode(tiles, inFrameOnly = true) {
 	    }
 	}
     }
+    code += '.' + f.toString(16);
     return code;
 }
 
@@ -1127,7 +1193,7 @@ function isValidStringCode(code) {
     for ( var c of letters) {
 	tiles[c] = 0;
     }
-    for (var c of code) {
+    for (var c of code.slice(0,-5)) {
 	if (c == 'z' || c == 'Z')
 	    continue;
 	const lower = c.toLowerCase();
@@ -1140,6 +1206,12 @@ function isValidStringCode(code) {
     return true;
 }
 
+function isValidPathStringCode(code) {
+    const m = code.match(/(?<code>.[^.]*)[.](?<frozen>[0123456789abcdefABCDEF]*)/);
+
+    return m != null && isValidStringCode(m.groups.code);
+}
+
 function run(canvasId, tilingCode = null, includeHandlers = true, sizes = [75, 100, 1, 6, 3, 10], colors = ['black', 'lightyellow', 'white', 'blue', 'silver']) {
     recolor(...colors);
     resize(...sizes);
@@ -1148,7 +1220,7 @@ function run(canvasId, tilingCode = null, includeHandlers = true, sizes = [75, 1
     
     if (tilingCode === null)
 	tilingCode = tilingFromQueryString();
-    if (tilingCode != null && isValidStringCode(tilingCode)) {
+    if (tilingCode != null && isValidPathStringCode(tilingCode)) {
 	cv.fromStringCode(tilingCode);
 	inFrameOnlyCheckbox = document.getElementById("inframeonly");
 	if (inFrameOnlyCheckbox != null) {
