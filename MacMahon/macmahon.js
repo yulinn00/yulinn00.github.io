@@ -26,6 +26,7 @@ class MacMahonGame {
 		this[key] = opts[key];
             }
 	}
+	this.baseVersion = 1;
     }
 
     run() {
@@ -88,7 +89,19 @@ class MacMahonGame {
 	    e.preventDefault();
 	}, {passive: false});
 
-	
+	// Needed only for Android devices
+
+	// Stop the Android tap highlight color flash
+	canvas.style.webkitTapHighlightColor = 'transparent';
+
+	// Prevent native scrolling/zooming gestures from interfering with your pointers
+	canvas.style.touchAction = 'none';
+
+	// Remove the default focus ring outline
+	canvas.style.outline = 'none';	
+
+	// End Android specific
+
 	this.vch = new Canvas2d(document.getElementById('variety'), 0, 0, this.colors['variety'], 1);
 	
 	document.addEventListener("keydown", this.onKeydown.bind(this));
