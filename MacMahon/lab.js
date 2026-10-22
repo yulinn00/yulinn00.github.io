@@ -3,8 +3,8 @@ class Lab extends MacMahonGame {
 	super(opts);
 
 	//console.log(`inner width = ${window.innerWidth}`);
-	this.version = 1;
-	document.getElementById("title").innerHTML = `MacMahon Squares Laboratory, V. ${this.version}.${this.baseVersion}`;
+	this.version = 2;
+	document.getElementById("title").innerHTML = `MacMahon Squares Laboratory, V. ${this.baseVersion}.${this.version}`;
 	this.size = window.innerWidth > 1200 ? 100 : 80;
 	this.scale = 2;
     }
@@ -87,9 +87,6 @@ class Lab extends MacMahonGame {
 	    e.preventDefault(); 
 	    onGoalPointerLeave(e);
 	}, {passive: false});
-	goalCanvas.addEventListener('touchleave', function(e) {
-	    e.preventDefault();
-	}, {passive: false});
 
 	// Needed only for Android devices
 
@@ -117,17 +114,26 @@ class Lab extends MacMahonGame {
 	    e.preventDefault(); 
 	    onContactPointerDown(e);
 	}, {passive: false});
+	contactCanvas.addEventListener('touchdown', function(e) {
+	    e.preventDefault(); 
+	}, {passive: false});
 
 	const onContactPointerUp = this.onContactPointerUp.bind(this);
 	contactCanvas.addEventListener('pointerup', function(e) {
 	    e.preventDefault(); 
 	    onContactPointerUp(e);
 	});
+	contactCanvas.addEventListener('touchend', function(e) {
+	    e.preventDefault(); 
+	}, {passive: false});
 
 	const onContactPointerMove = this.onContactPointerMove.bind(this);
 	contactCanvas.addEventListener('pointermove', function(e) {
 	    e.preventDefault(); 
 	    onContactPointerMove(e);
+	}, {passive: false});
+	contactCanvas.addEventListener('touchmove', function(e) {
+	    e.preventDefault(); 
 	}, {passive: false});
 
 	const onContactPointerLeave = this.onContactPointerLeave.bind(this);
@@ -136,6 +142,20 @@ class Lab extends MacMahonGame {
 	    onContactPointerLeave(e);
 	}, {passive: false});
 
+	// Needed only for Android devices
+
+	// Stop the Android tap highlight color flash
+	contactCanvas.style.webkitTapHighlightColor = 'transparent';
+
+	// Prevent native scrolling/zooming gestures from interfering with your pointers
+	contactCanvas.style.touchAction = 'none';
+
+	// Remove the default focus ring outline
+	contactCanvas.style.outline = 'none';	
+
+	// End Android specific
+
+	
 	this.contactPos = [-1,-1];
 
 	this.cch.canvas.style.cursor = "pointer";

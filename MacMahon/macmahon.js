@@ -26,7 +26,7 @@ class MacMahonGame {
 		this[key] = opts[key];
             }
 	}
-	this.baseVersion = 1;
+	this.baseVersion = 2;
     }
 
     run() {
@@ -84,9 +84,6 @@ class MacMahonGame {
 	canvas.addEventListener('pointerleave', function(e) {
 	    e.preventDefault(); 
 	    onPointerLeave(e);
-	}, {passive: false});
-	canvas.addEventListener('touchleave', function(e) {
-	    e.preventDefault();
 	}, {passive: false});
 
 	// Needed only for Android devices
@@ -614,7 +611,8 @@ class MacMahonGame {
 	} else if (!this.moving.moved) {
 	    const t = new Date().getTime();
             if (t - this.moving.ts < 300) {
-		this.rotating = {index: sq, direction: event.shiftKey || event.button == 2, angle: 0, timer: setInterval(this.animateRotate.bind(this), 50)};
+		//this.rotating = {index: sq, direction: event.shiftKey || event.button == 2, angle: 0, timer: setInterval(this.animateRotate.bind(this), 50)};
+		this.rotating = {index: sq, direction: false, angle: 0, timer: setInterval(this.animateRotate.bind(this), 50)};
 		this.animating = true;
 		this.moving = null;
 		return;
