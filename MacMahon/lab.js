@@ -91,6 +91,20 @@ class Lab extends MacMahonGame {
 	    e.preventDefault();
 	}, {passive: false});
 
+	// Needed only for Android devices
+
+	// Stop the Android tap highlight color flash
+	goalCanvas.style.webkitTapHighlightColor = 'transparent';
+
+	// Prevent native scrolling/zooming gestures from interfering with your pointers
+	goalCanvas.style.touchAction = 'none';
+
+	// Remove the default focus ring outline
+	goalCanvas.style.outline = 'none';	
+
+	// End Android specific
+
+
 	this.goalPos = [-1,-1];
 	this.goalTriangle = -1;
 
