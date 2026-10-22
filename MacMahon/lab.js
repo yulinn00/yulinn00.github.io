@@ -58,23 +58,35 @@ class Lab extends MacMahonGame {
 	    e.preventDefault(); 
 	    onGoalPointerDown(e);
 	}, {passive: false});
+	goalCanvas.addEventListener('touchdown', function(e) {
+	    e.preventDefault(); 
+	}, {passive: false});
 
 	const onGoalPointerUp = this.onGoalPointerUp.bind(this);
 	goalCanvas.addEventListener('pointerup', function(e) {
 	    e.preventDefault(); 
 	    onGoalPointerUp(e);
 	});
+	goalCanvas.addEventListener('touchend', function(e) {
+	    e.preventDefault(); 
+	}, {passive: false});
 
 	const onGoalPointerMove = this.onGoalPointerMove.bind(this);
 	goalCanvas.addEventListener('pointermove', function(e) {
 	    e.preventDefault(); 
 	    onGoalPointerMove(e);
 	}, {passive: false});
+	goalCanvas.addEventListener('touchmove', function(e) {
+	    e.preventDefault(); 
+	}, {passive: false});
 
 	const onGoalPointerLeave = this.onGoalPointerLeave.bind(this);
 	goalCanvas.addEventListener('pointerleave', function(e) {
 	    e.preventDefault(); 
 	    onGoalPointerLeave(e);
+	}, {passive: false});
+	goalCanvas.addEventListener('touchleave', function(e) {
+	    e.preventDefault();
 	}, {passive: false});
 
 	this.goalPos = [-1,-1];
