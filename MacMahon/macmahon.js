@@ -611,16 +611,18 @@ class MacMahonGame {
 	} else if (!this.moving.moved) {
 	    const t = new Date().getTime();
             if (t - this.moving.ts < 300) {
-		//this.rotating = {index: sq, direction: event.shiftKey || event.button == 2, angle: 0, timer: setInterval(this.animateRotate.bind(this), 50)};
-		this.rotating = {index: sq, direction: false, angle: 0, timer: setInterval(this.animateRotate.bind(this), 50)};
+		this.rotating = {index: sq, direction: event.shiftKey || event.button == 2, angle: 0, timer: setInterval(this.animateRotate.bind(this), 50)};
 		this.animating = true;
 		this.moving = null;
+		document.getElementById("status").innerHTML = 'rotating';
 		return;
             }
 	    this.moving = null;
 	    this.render();
+	    document.getElementById("status").innerHTML = 'not rotating';
 	    return;
 	} else {
+	    document.getElementById("status").innerHTML = 'moved';
 	    this.swap(sq,this.moving.index);
 	    this.ch.canvas.style.cursor = "pointer";
 	}
