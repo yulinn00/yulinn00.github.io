@@ -2,7 +2,8 @@ class Lab extends MacMahonGame {
     constructor(opts = null) {
 	super(opts);
 
-	this.size = 100;
+	console.log(`inner width = ${window.innerWidth}`);
+	this.size = window.innerWidth > 1200 ? 100 : 80;
 	this.scale = 2;
     }
 
