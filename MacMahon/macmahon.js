@@ -66,6 +66,9 @@ class MacMahonGame {
 	    e.preventDefault(); 
 	    onPointerUp(e);
 	});
+	canvas.addEventListener('touchend', function(e) {
+	    e.preventDefault(); 
+	}, {passive: false});
 
 	const onPointerMove = this.onPointerMove.bind(this);
 	canvas.addEventListener('pointermove', function(e) {
