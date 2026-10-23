@@ -605,6 +605,7 @@ class MacMahonGame {
 	}
 	const pos = this.ch.posFromEvent(event);
 	const sq = this.inSquare(this.ch, pos);
+	const stat = document.getElementById("status");
 	this.ch.canvas.style.cursor = sq == -1 ? "default" : "pointer";
 	if ( sq < 0 || this.frozen.includes(sq) || this.hints.includes(sq)) {
 	    this.ch.canvas.style.cursor = "default";
@@ -614,15 +615,18 @@ class MacMahonGame {
 		this.rotating = {index: sq, direction: event.shiftKey || event.button == 2, angle: 0, timer: setInterval(this.animateRotate.bind(this), 50)};
 		this.animating = true;
 		this.moving = null;
-		document.getElementById("status").innerHTML = 'rotating';
+		if (stat != null)
+		    stat.innerHTML = 'rotating';
 		return;
             }
 	    this.moving = null;
 	    this.render();
-	    document.getElementById("status").innerHTML = 'not rotating';
+	    if (stat != null)
+		stat.innerHTML = 'not rotating';
 	    return;
 	} else {
-	    document.getElementById("status").innerHTML = 'moved';
+	    if (stat != null)
+		stat.innerHTML = 'moved';
 	    this.swap(sq,this.moving.index);
 	    this.ch.canvas.style.cursor = "pointer";
 	}
