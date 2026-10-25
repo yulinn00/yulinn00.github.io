@@ -3,10 +3,10 @@ class Lab extends MacMahonGame {
 	super(opts);
 
 	//console.log(`inner width = ${window.innerWidth}`);
-	this.version = 2;
+	this.version = 3;
 	document.getElementById("title").innerHTML = `MacMahon Squares Laboratory, V. ${this.baseVersion}.${this.version}`;
 	this.size = window.innerWidth > 1200 ? 100 : 80;
-	this.scale = 3;
+	this.scale = 2;
     }
 
     run() {
