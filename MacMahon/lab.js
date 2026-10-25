@@ -6,7 +6,7 @@ class Lab extends MacMahonGame {
 	this.version = 2;
 	document.getElementById("title").innerHTML = `MacMahon Squares Laboratory, V. ${this.baseVersion}.${this.version}`;
 	this.size = window.innerWidth > 1200 ? 100 : 80;
-	this.scale = 2;
+	this.scale = 3;
     }
 
     run() {
@@ -357,8 +357,9 @@ class Lab extends MacMahonGame {
     onGoalPointerUp(event) {
 	const pos = this.gch.posFromEvent(event);
 	var goalTriangle = this.inBoundaryTriangle(this.gch, pos);
-	if (pos[0] != this.goalPos[0] || pos[1] != this.goalPos[1] || this.goalTriangle == -1) {
-	    this.goalPos = [-1,-1];
+	if (Math.abs(pos.x - this.goalPos.x) >= 8 || Math.abs(pos.y - this.goalPos.y) >= 8 || this.goalTriangle == -1) {
+	    this.goalPos.x = -20;
+	    this.goalPos.y = -20;
 	    this.goalTriangle = -1;
 	    return;
 	}
@@ -381,22 +382,18 @@ class Lab extends MacMahonGame {
 	this.renderVariety(this.gch, this.goal.variety);
 	this.update();
 
-	this.goalPos = [-1,-1];
+	this.goalPos.x = -20;
+	this.goalPos.y = -20;
 	this.goalTriangle = -1;
     }
 
     onGoalPointerMove(event) {
 	const pos = this.gch.posFromEvent(event);
-	if (pos != this.goalPos) {
-	    this.goalPos = [-1,-1];
-	    this.goalTriangle = -1;
-	}
 	this.gch.canvas.style.cursor = this.inBoundaryTriangle(this.gch, pos) == -1 ? "default" : "pointer";
     }
 
     onGoalPointerLeave(event) {
-	this.goalPos = [-1,-1];
-	this.goalTriangle = -1;
+	// do nothing
     }
 
 
@@ -407,8 +404,9 @@ class Lab extends MacMahonGame {
 
     onContactPointerUp(event) {
 	const pos = this.cch.posFromEvent(event);
-	if (pos[0] != this.contactPos[0] || pos[1] != this.contactPos[1] ) {
-	    this.contactPos = [-1,-1];
+	if (Math.abs(pos.x - this.contactPos.x) >= 8 || Math.abs(pos.y - this.contactPos.y) >= 8) {
+	    this.contactPos.x = -20;
+	    this.contactPos.y = -20;
 	    return;
 	}
 	// cycle the contact system
@@ -428,15 +426,16 @@ class Lab extends MacMahonGame {
 	}
 	this.configureContact();
 	this.render();
-	this.contactPos = [-1,-1];
+	this.contactPos.x = -20;
+	this.contactPos.y = -20;
     }
 
     onContactPointerMove(event) {
-	this.goalPos = [-1,-1];
+	// do nothing
     }
 
     onContactPointerLeave(event) {
-	this.contactPos = [-1,-1];
+	// do nothing
     }
 
     onLoad() {
