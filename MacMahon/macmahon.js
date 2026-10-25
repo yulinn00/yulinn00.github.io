@@ -595,6 +595,10 @@ class MacMahonGame {
 	pos.ts = new Date().getTime();
 	pos.dx = 0;
 	pos.dy = 0;
+	//
+	pos.x0 = pos.x;
+	pos.y0 = pos.y;
+	//
 	pos.moved = false;
 	this.moving = pos;
     }
@@ -609,9 +613,9 @@ class MacMahonGame {
 	this.ch.canvas.style.cursor = sq == -1 ? "default" : "pointer";
 	if ( sq < 0 || this.frozen.includes(sq) || this.hints.includes(sq)) {
 	    this.ch.canvas.style.cursor = "default";
-	} else if (!this.moving.moved) {
+	} else if (Math.abs(pos.x - this.moving.x0) < this.size / 8 && Math.abs(pos.y - this.moving.y0) < this.size / 8) {
 	    const t = new Date().getTime();
-            if (t - this.moving.ts < 300) {
+            if (t - this.moving.ts < 500) {
 		this.rotating = {index: sq, direction: event.shiftKey || event.button == 2, angle: 0, timer: setInterval(this.animateRotate.bind(this), 50)};
 		this.animating = true;
 		this.moving = null;
