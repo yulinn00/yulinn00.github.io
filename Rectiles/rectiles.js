@@ -904,7 +904,7 @@ function initializeHandlers(cv) {
 function rotateTile(tile, no_hist = false) {
     tile.rotate();
     if (!no_hist)
-	moveHistory.push({type: 'rot', tile: tile});
+	moveHistory.push({type: 'rot', tile: tile, count: 1 ? (1 <= tile.r && tile.r <= height && 1 <= tile.c && tile.c <= width && Math.abs(tile.lines_at[0] - tile.lines_at[1]) != 4) : 0});
     tile.cv.update();
 }
 
@@ -917,13 +917,13 @@ function swapTile( tile, swapTile, no_hist = false) {
     swapTile.c = c;
 
     if (!no_hist)
-	moveHistory.push({type: 'swap', tile: tile, swap: swapTile});
+	moveHistory.push({type: 'swap', tile: tile, swap: swapTile, count: (1 ? (1 <= r && r <= height && 1 <= c && c <= width) : 0) + (1 ? (1 <= tile.r && tile.r <= height && 1 <= tile.c && tile.c <= width) : 0)});
     tile.cv.update();
 }
 
 function moveTile( tile, rc, no_hist = false) {
     if (!no_hist)
-	moveHistory.push({type: 'move', tile: tile, from: [tile.r, tile.c]});
+	moveHistory.push({type: 'move', tile: tile, from: [tile.r, tile.c], count: 1 ? (1 <= rc[0] && rc[0] <= height && 1 <= rc[1] && rc[1] <= width) : 0});
     tile.r = rc[0];
     tile.c = rc[1];
     tile.cv.update();

@@ -104,12 +104,17 @@ class PuzzleCanvas extends Canvas2d {
     calculateMoves(afterHint = false) {
 	var moves = 0;
 	for (var m of moveHistory) {
+	    moves += m.count;
+	    if (m.type == 'hint') {
+		if (afterHint) moves = 0;
+	    }
+	    /***
 	    if (m.type == 'noundo') continue;
 	    if (m.type == 'hint') {
 		if (afterHint) moves = 0;
 	    } else if (m.type != 'rot') {
 		moves += 1;
-	    } 
+	    ***/
 	}
 	return moves;
     }
@@ -134,7 +139,7 @@ class PuzzleCanvas extends Canvas2d {
 		if (1 <= t.r && t.r <= height && 1<= t.c && t.c <= width && this.solutionCode.charAt(t.c - 1 + (t.r - 1) * width) != 'z') t.frozen = true;
 	    });
 	    this.movesToSolve = this.calculateMoves();
-	    moveHistory.push({type: 'noundo'});
+	    moveHistory.push({type: 'noundo', count: 0});
 	    this.tiles = this.tiles_in_path;
 	    this.solved = true;
 	}
@@ -242,7 +247,7 @@ class PuzzleCanvas extends Canvas2d {
 
     onHint() {
 	this.tiles = this.tiles_in_path;
-	moveHistory.push({type: 'hint'});
+	moveHistory.push({type: 'hint', count: 0});
 	this.hintUsed = true;
 	this.updatePaths();
 	this.drawBoard();
