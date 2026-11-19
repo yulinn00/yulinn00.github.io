@@ -142,7 +142,10 @@ class PuzzleCanvas extends Canvas2d {
 	    moveHistory.push({type: 'noundo', count: 0});
 	    this.tiles = this.tiles_in_path;
 	    this.solved = true;
+	    this.updatePaths();
 	}
+	document.getElementById("hint").disabled = this.solved || this.hintUsed;
+	document.getElementById("undo").disabled = this.solved || moveHistory.length < 1 || moveHistory[moveHistory.length - 1].type == 'noundo' || moveHistory[moveHistory.length - 1].type == 'hint';
     }
 
     colorPaths() {
@@ -244,13 +247,13 @@ class PuzzleCanvas extends Canvas2d {
 	}
     }
 
-
     onHint() {
 	this.tiles = this.tiles_in_path;
 	moveHistory.push({type: 'hint', count: 0});
 	this.hintUsed = true;
 	this.updatePaths();
 	this.drawBoard();
+	document.getElementById("undo").disabled = true;
 	document.getElementById("hint").disabled = true;
     }
 
